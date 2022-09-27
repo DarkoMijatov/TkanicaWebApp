@@ -1,0 +1,111 @@
+﻿@model TkanicaWebApp.Models.Member
+
+@{
+    ViewData["Title"] = "Novi član";
+}
+
+<h1>Novi član</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                Ime
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Prezime
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Datum rođenja
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Datum upisa
+                <input asp-for="DateOfEntry" class="form-control" />
+                <span asp-validation-for="DateOfEntry" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Active" /> Aktivan
+                </label>
+            </div>
+            <div class="form-group">
+                Telefon
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Email
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Adresa
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Grad
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Škola
+                <input asp-for="School" class="form-control" />
+                <span asp-validation-for="School" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Razred
+                <input asp-for="Class" class="form-control" />
+                <span asp-validation-for="Class" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Godine iskustva
+                <input asp-for="YearsOfExperience" class="form-control" />
+                <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Facebook
+                <input asp-for="FacebookProfileUrl" class="form-control" />
+                <span asp-validation-for="FacebookProfileUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Instagram
+                <input asp-for="InstagramProfileUrl" class="form-control" />
+                <span asp-validation-for="InstagramProfileUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                TikTok
+                <input asp-for="TikTokProfileUrl" class="form-control" />
+                <span asp-validation-for="TikTokProfileUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Fotografija
+                <input asp-for="ProfilePicture" class="form-control" />
+                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Članarina
+                <select asp-for="MembershipFeeId" class ="form-control" asp-items="ViewBag.MembershipFeeId"></select>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Povratak na listu</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

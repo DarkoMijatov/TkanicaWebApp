@@ -1,0 +1,70 @@
+﻿@model TkanicaWebApp.Models.MemberGroup
+
+@{
+    ViewData["Title"] = "Podaci o grupi članova";
+    string active = Model.Active ? "da" : "ne";
+    int activeCount = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count(x => x.Active);
+    int totalCount = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count();
+    var activeMembers = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).ToList();
+}
+
+<h1>Podaci o grupi članova</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Naziv
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Aktivna
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => active)
+        <dt class = "col-sm-2">
+            Datum kreiranja
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+        <dt class = "col-sm-2">
+            Datum izmene
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Broj aktivnih članova
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => activeCount)
+        </dd>
+        <dt class="col-sm-2">
+            Ukupan broj članova
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => totalCount)
+        </dd>
+        <dt class="col-sm-2">
+            Aktivni članovi:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var member in activeMembers)
+                {
+                    string name = $"{member.FirstName} {member.LastName}";
+                    <li>
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@member.Id">@Html.DisplayFor(model => name)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmeni</a> |
+    <a asp-action="Index">Povratak na listu</a>
+</div>

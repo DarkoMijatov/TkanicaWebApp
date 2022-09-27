@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TkanicaWebApp.Models.MembershipFee>
+
+@{
+    ViewData["Title"] = "Lista članarina";
+}
+
+<h1>Lista članarina</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Naziv
+            </th>
+            <th>
+                Grupa
+            </th>
+            <th>
+                Iznos
+            </th>
+            <th>
+                Datum kreiranja
+            </th>
+            <th>
+                Datum izmene
+            </th>
+            <th>
+                Broj aktivnih članova
+            </th>
+            <th>
+                Ukupan broj članova
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            int activeCount = item.Members.Count(x => x.Active);
+            int totalCount = item.Members.Count;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberGroup.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => activeCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => totalCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
