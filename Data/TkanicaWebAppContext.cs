@@ -14,6 +14,8 @@ namespace TkanicaWebApp.Data
         public DbSet<MemberGroup> MemberGroup { get; set; }
         public DbSet<MembershipFee> MembershipFee { get; set; }
         public DbSet<Member> Member { get; set; }
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<EmployeeMemberGroup> EmployeeMemberGroup { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

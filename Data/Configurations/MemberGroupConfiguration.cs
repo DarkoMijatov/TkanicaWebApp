@@ -13,7 +13,10 @@ namespace TkanicaWebApp.Data.Configurations
                 new MemberGroup { Id = 2, Name = "Dečji ansambl", Active = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
                 new MemberGroup { Id = 3, Name = "Rekreativna grupa", Active = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
             );
-
+            builder.HasMany(x => x.EmployeeMemberGroups)
+                .WithOne(x => x.MemberGroup)
+                .HasForeignKey(x => x.MemberGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
