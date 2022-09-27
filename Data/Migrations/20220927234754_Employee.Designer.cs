@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TkanicaWebApp.Data;
 
@@ -11,9 +12,10 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Data.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    partial class TkanicaWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20220927234754_Employee")]
+    partial class Employee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,25 +208,25 @@ namespace TkanicaWebApp.Data.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(5983),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(6030)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             Active = true,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(6034),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(6036)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             Active = false,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(6039),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Rekreativna grupa",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(6041)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -263,37 +265,37 @@ namespace TkanicaWebApp.Data.Migrations
                         {
                             Id = 1,
                             Amount = 1000m,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7615),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MemberGroupId = 1,
                             Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7632)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             Amount = 500m,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7636),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MemberGroupId = 1,
                             Name = "Prvi ansambl popust",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7638)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             Amount = 800m,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7640),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MemberGroupId = 2,
                             Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7642)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
                             Amount = 400m,
-                            CreatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7645),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MemberGroupId = 2,
                             Name = "Dečji ansambl popust",
-                            UpdatedAt = new DateTime(2022, 9, 25, 3, 55, 34, 398, DateTimeKind.Local).AddTicks(7647)
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
