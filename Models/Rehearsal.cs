@@ -8,8 +8,6 @@ namespace TkanicaWebApp.Models
         public int Id { get; set; }
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
-        public int MemberGroupId { get; set; }
-        public MemberGroup MemberGroup { get; set; }
         public List<RehearsalEmployee> RehearsalEmployees { get; set; }
         public List<RehearsalMember> RehearsalMembers { get; set; }
         [DataType(DataType.DateTime)]
