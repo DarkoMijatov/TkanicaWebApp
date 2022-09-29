@@ -22,8 +22,11 @@ namespace TkanicaWebApp.Controllers
         // GET: MemberGroups
         public async Task<IActionResult> Index()
         {
-            var tkanicaWebAppContext = _context.MemberGroup.Include(m => m.MembershipFees).Include("MembershipFees.Members");
-            return View(await tkanicaWebAppContext.ToListAsync());
+            return View(await _context.MemberGroup
+                .Include(m => m.MembershipFees)
+                .Include("MembershipFees.Members")
+                .Include(x => x.EmployeeMemberGroups)
+                .ToListAsync());
         }
 
         // GET: MemberGroups/Details/5
@@ -33,8 +36,10 @@ namespace TkanicaWebApp.Controllers
             {
                 return NotFound();
             }
-            var tkanicaWebAppContext = _context.MemberGroup.Include(m => m.MembershipFees).Include("MembershipFees.Members");
-            var memberGroup = await tkanicaWebAppContext
+            var memberGroup = await _context.MemberGroup
+                .Include(m => m.MembershipFees).Include("MembershipFees.Members")
+                .Include(x => x.EmployeeMemberGroups)
+                .Include("EmployeeMemberGroups.Employee")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (memberGroup == null)
             {
@@ -124,8 +129,10 @@ namespace TkanicaWebApp.Controllers
             {
                 return NotFound();
             }
-            var tkanicaWebAppContext = _context.MemberGroup.Include(m => m.MembershipFees).Include("MembershipFees.Members");
-            var memberGroup = await tkanicaWebAppContext
+            var memberGroup = await _context.MemberGroup
+                .Include(m => m.MembershipFees)
+                .Include("MembershipFees.Members")
+                .Include(x => x.EmployeeMemberGroups)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (memberGroup == null)
             {
@@ -144,7 +151,11 @@ namespace TkanicaWebApp.Controllers
             {
                 return Problem("Entity set 'TkanicaWebAppContext.MemberGroup'  is null.");
             }
-            var memberGroup = await _context.MemberGroup.FindAsync(id);
+            var memberGroup = await _context.MemberGroup
+                .Include(m => m.MembershipFees)
+                .Include("MembershipFees.Members")
+                .Include(x => x.EmployeeMemberGroups)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (memberGroup != null)
             {
                 _context.MemberGroup.Remove(memberGroup);

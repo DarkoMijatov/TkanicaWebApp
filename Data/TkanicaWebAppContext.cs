@@ -16,6 +16,8 @@ namespace TkanicaWebApp.Data
         public DbSet<Member> Member { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<EmployeeMemberGroup> EmployeeMemberGroup { get; set; }
+        public DbSet<PayPeriod> PayPeriod { get; set; }
+        public DbSet<EarningType> EarningType { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

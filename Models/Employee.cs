@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TkanicaWebApp.Interfaces;
@@ -23,8 +24,10 @@ namespace TkanicaWebApp.Models
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
+        public int EarningTypeId { get; set; }
         public EarningType EarningType { get; set; }
         public decimal EarningAmount { get; set; }
+        public int PayPeriodId { get; set; }
         public PayPeriod PayPeriod {get; set; }
         public decimal? OtherExpenses { get; set; }
         [DataType(DataType.Text)]
@@ -35,17 +38,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         public List<EmployeeMemberGroup> EmployeeMemberGroups { get; set; }
-    }
-    public enum EarningType
-    {
-        Fixed = 1,
-        ByRehearsal,
-        ByMember
-    }
-    public enum PayPeriod
-    {
-        Daily = 1,
-        Weekly,
-        Monthly
+        [NotMapped]
+        public string FullName { get => $"{FirstName} {LastName}"; }
     }
 }

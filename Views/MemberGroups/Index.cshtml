@@ -30,6 +30,9 @@
             <th>
                 Ukupan broj igrača
             </th>
+            <th>
+                Broj zaposlenih
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,6 +41,7 @@
             string active = item.Active ? "da" : "ne";
             int activeCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count(x => x.Active);
             int totalCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count();
+            int employeeCount = item.EmployeeMemberGroups.Count;
             <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -56,6 +60,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => totalCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => employeeCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |

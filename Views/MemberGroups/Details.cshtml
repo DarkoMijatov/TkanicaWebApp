@@ -6,6 +6,8 @@
     int activeCount = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count(x => x.Active);
     int totalCount = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count();
     var activeMembers = Model.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).ToList();
+    var employeeCount = Model.EmployeeMemberGroups.Count;
+    var employees = Model.EmployeeMemberGroups.Select(x => x.Employee).ToList();
 }
 
 <h1>Podaci o grupi članova</h1>
@@ -47,6 +49,26 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => totalCount)
+        </dd>
+        <dt class="col-sm-2">
+            Broj zaposlenih
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => totalCount)
+        </dd>
+        <dt class="col-sm-2">
+            Zaposleni:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                    @foreach (var employee in employees)
+                    {
+                        string name = $"{employee.FirstName} {employee.LastName}";
+                    <li>
+                        <a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id">@Html.DisplayFor(model => name)</a>
+                    </li>
+                    }
+            </ul>
         </dd>
         <dt class="col-sm-2">
             Aktivni članovi:
