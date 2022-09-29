@@ -17,5 +17,6 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         public List<EmployeeMemberGroup> EmployeeMemberGroups { get; set; }
+        public List<Rehearsal> Rehearsals { get; set; }
     }
 }
