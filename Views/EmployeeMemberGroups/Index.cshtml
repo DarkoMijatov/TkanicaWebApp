@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TkanicaWebApp.Models.EmployeeMemberGroup>
+
+@{
+    ViewData["Title"] = "Lista angažovanja";
+}
+
+<h1>Lista angažovanja</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Zaposleni
+            </th>
+            <th>
+                Grupa članova
+            </th>
+            <th>
+                Datum kreiranja
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            string employeeName = $"{item.Employee.FirstName} {item.Employee.LastName}";
+            string groupName = item.MemberGroup.Name;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => employeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => groupName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

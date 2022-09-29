@@ -18,10 +18,10 @@ namespace TkanicaWebApp.Data.Configurations
                 .HasPrecision(14, 2);
 
             builder.HasData(
-                new MembershipFee { Id = 1, Name = "Prvi ansambl", MemberGroupId = 1, Amount = 1000, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new MembershipFee { Id = 2, Name = "Prvi ansambl popust", MemberGroupId = 1, Amount = 500, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new MembershipFee { Id = 3, Name = "Dečji ansambl", MemberGroupId = 2, Amount = 800, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new MembershipFee { Id = 4, Name = "Dečji ansambl popust", MemberGroupId = 2, Amount = 400, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                new MembershipFee { Id = 1, Name = "Prvi ansambl", MemberGroupId = 1, Amount = 1000 },
+                new MembershipFee { Id = 2, Name = "Prvi ansambl popust", MemberGroupId = 1, Amount = 500 },
+                new MembershipFee { Id = 3, Name = "Dečji ansambl", MemberGroupId = 2, Amount = 800 },
+                new MembershipFee { Id = 4, Name = "Dečji ansambl popust", MemberGroupId = 2, Amount = 400 }
             );
         }
     }

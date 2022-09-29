@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TkanicaWebApp.Data;
 
@@ -11,9 +12,10 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Data.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    partial class TkanicaWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20220928235735_Employee")]
+    partial class Employee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,0 +1,104 @@
+﻿@model IEnumerable<TkanicaWebApp.Models.Employee>
+
+@{
+    ViewData["Title"] = "Lista zaposlenih";
+}
+
+<h1>Lista zaposlenih</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Ime
+            </th>
+            <th>
+                Prezime
+            </th>
+            <th>
+                Pozicija
+            </th>
+            <th>
+                Datum rođenja
+            </th>
+            <th>
+                Početak zaposlenja
+            </th>
+            <th>
+                Kraj zaposlenja
+            </th>
+            <th>
+                Vrsta zarade
+            </th>
+            <th>
+                Iznos zarade
+            </th>
+            <th>
+                Period plaćanja
+            </th>
+            <th>
+                Dodatni troškovi
+            </th>
+            <th>
+                Opis dodatnih troškova
+            </th>
+            <th>
+                Broj grupa članova
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            int groupsCount = item.EmployeeMemberGroups.Count;
+            string earningType = item.EarningType.Name;
+            string payPeriod = item.PayPeriod.Name;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => earningType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EarningAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => payPeriod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OtherExpenses)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OtherExpensesDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => groupsCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
