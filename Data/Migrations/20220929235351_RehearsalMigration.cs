@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TkanicaWebApp.Data.Migrations
 {
-    public partial class Rehearsal : Migration
+    public partial class RehearsalMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

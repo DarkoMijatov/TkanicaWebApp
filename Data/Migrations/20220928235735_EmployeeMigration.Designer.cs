@@ -12,8 +12,8 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Data.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    [Migration("20220929235351_Rehearsal")]
-    partial class Rehearsal
+    [Migration("20220928235735_Employee")]
+    partial class EmployeeMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -393,86 +393,6 @@ namespace TkanicaWebApp.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TkanicaWebApp.Models.Rehearsal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rehearsal");
-                });
-
-            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalEmployee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RehearsalId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("RehearsalId");
-
-                    b.ToTable("RehearsalEmployee");
-                });
-
-            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RehearsalId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("RehearsalId");
-
-                    b.ToTable("RehearsalMember");
-                });
-
             modelBuilder.Entity("TkanicaWebApp.Models.Employee", b =>
                 {
                     b.HasOne("TkanicaWebApp.Models.EarningType", "EarningType")
@@ -533,44 +453,6 @@ namespace TkanicaWebApp.Data.Migrations
                     b.Navigation("MemberGroup");
                 });
 
-            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalEmployee", b =>
-                {
-                    b.HasOne("TkanicaWebApp.Models.Employee", "Employee")
-                        .WithMany("RehearsalEmployees")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TkanicaWebApp.Models.Rehearsal", "Rehearsal")
-                        .WithMany("RehearsalEmployees")
-                        .HasForeignKey("RehearsalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Rehearsal");
-                });
-
-            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalMember", b =>
-                {
-                    b.HasOne("TkanicaWebApp.Models.Member", "Member")
-                        .WithMany("RehearsalMembers")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TkanicaWebApp.Models.Rehearsal", "Rehearsal")
-                        .WithMany("RehearsalMembers")
-                        .HasForeignKey("RehearsalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Rehearsal");
-                });
-
             modelBuilder.Entity("TkanicaWebApp.Models.EarningType", b =>
                 {
                     b.Navigation("Employees");
@@ -579,13 +461,6 @@ namespace TkanicaWebApp.Data.Migrations
             modelBuilder.Entity("TkanicaWebApp.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeMemberGroups");
-
-                    b.Navigation("RehearsalEmployees");
-                });
-
-            modelBuilder.Entity("TkanicaWebApp.Models.Member", b =>
-                {
-                    b.Navigation("RehearsalMembers");
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.MemberGroup", b =>
@@ -603,13 +478,6 @@ namespace TkanicaWebApp.Data.Migrations
             modelBuilder.Entity("TkanicaWebApp.Models.PayPeriod", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("TkanicaWebApp.Models.Rehearsal", b =>
-                {
-                    b.Navigation("RehearsalEmployees");
-
-                    b.Navigation("RehearsalMembers");
                 });
 #pragma warning restore 612, 618
         }

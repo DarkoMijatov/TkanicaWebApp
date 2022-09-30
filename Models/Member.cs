@@ -54,5 +54,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         public List<RehearsalMember> RehearsalMembers { get; set; }
+        [NotMapped]
+        public string FullName { get => $"{FirstName} {LastName}"; }
     }
 }

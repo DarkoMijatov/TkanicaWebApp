@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using TkanicaWebApp.Data.Migrations;
 using TkanicaWebApp.Interfaces;
 using TkanicaWebApp.Models;
 
@@ -18,6 +19,9 @@ namespace TkanicaWebApp.Data
         public DbSet<EmployeeMemberGroup> EmployeeMemberGroup { get; set; }
         public DbSet<PayPeriod> PayPeriod { get; set; }
         public DbSet<EarningType> EarningType { get; set; }
+        public DbSet<Rehearsal> Rehearsal { get; set; }
+        public DbSet<RehearsalEmployee> RehearsalEmployee { get; set; }
+        public DbSet<RehearsalMember> RehearsalMember { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
