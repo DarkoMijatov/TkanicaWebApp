@@ -27,7 +27,8 @@ namespace TkanicaWebApp.Controllers
                   .Include(x => x.RehearsalMembers)
                   .Include("RehearsalEmployees.Employee")
                   .Include("RehearsalMembers.Member")
-                  .Include("RehearsalMembers.Member.MemberGroup")
+                  .Include("RehearsalMembers.Member.MembershipFee")
+                  .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
                   .ToListAsync());
         }
 
@@ -44,7 +45,8 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalEmployees.Employee")
                 .Include("RehearsalMembers.Member")
-                .Include("RehearsalMembers.Member.MemberGroup")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rehearsal == null)
             {
@@ -150,7 +152,8 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalEmployees.Employee")
                 .Include("RehearsalMembers.Member")
-                .Include("RehearsalMembers.Member.MemberGroup")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                 .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rehearsal == null)
             {
@@ -174,7 +177,8 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalEmployees.Employee")
                 .Include("RehearsalMembers.Member")
-                .Include("RehearsalMembers.Member.MemberGroup")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rehearsal != null)
             {
