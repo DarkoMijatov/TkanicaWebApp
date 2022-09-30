@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TkanicaWebApp.Data.Migrations;
 using TkanicaWebApp.Interfaces;
 using TkanicaWebApp.Models;
 
@@ -25,6 +24,7 @@ namespace TkanicaWebApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.UseCollation("Serbian_Latin_100_CI_AI_KS_WS_SC_UTF8");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 

@@ -9,16 +9,17 @@ using TkanicaWebApp.Data;
 
 #nullable disable
 
-namespace TkanicaWebApp.Data.Migrations
+namespace TkanicaWebApp.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    [Migration("20220929235351_Rehearsal")]
-    partial class RehearsalMigration
+    [Migration("20220930003510_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseCollation("Serbian_Latin_100_CI_AI_KS_WS_SC_UTF8")
                 .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -251,32 +252,6 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MemberGroup");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = true,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rekreativna grupa",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.MembershipFee", b =>
@@ -308,44 +283,6 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasIndex("MemberGroupId");
 
                     b.ToTable("MembershipFee");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 1000m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 1,
-                            Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 500m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 1,
-                            Name = "Prvi ansambl popust",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 800m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 2,
-                            Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 400m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 2,
-                            Name = "Dečji ansambl popust",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.PayPeriod", b =>
