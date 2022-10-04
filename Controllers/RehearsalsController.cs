@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -59,9 +56,9 @@ namespace TkanicaWebApp.Controllers
         // GET: Rehearsals/Create
         public IActionResult Create()
         {
-            ViewData["MemberGroupId"] = new SelectList(_context.MemberGroup, "Id", "Name");
-            ViewData["Employees"] = new SelectList(_context.EmployeeMemberGroup, "EmployeeId", "FullName");
-            ViewData["Members"] = new SelectList(_context.Member, "Id", "FullName");
+
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName");
+            ViewData["MemberId"] = new SelectList(_context.Member.Where(x => x.Active), "Id", "FullName");
             return View();
         }
 
@@ -70,12 +67,22 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,CreatedAt,UpdatedAt")] Rehearsal rehearsal, [Bind("EmployeeId")] List<RehearsalEmployee> rehearsalEmployees, [Bind("MemberId")] List<RehearsalMember> rehearsalMembers)
+        public async Task<IActionResult> Create([Bind("Date,EmployeeIds,MemberIds")] RehearsalViewModel rehearsalViewModel)
         {
+            var rehearsal = new Rehearsal();
             if (ModelState.IsValid)
             {
-                rehearsal.RehearsalMembers = rehearsalMembers;
-                rehearsal.RehearsalEmployees = rehearsalEmployees;
+                rehearsal.Date = rehearsalViewModel.Date;
+                rehearsal.RehearsalMembers = new List<RehearsalMember>();
+                rehearsal.RehearsalEmployees = new List<RehearsalEmployee>();
+                foreach(var memberId in rehearsalViewModel.MemberIds)
+                {
+                    rehearsal.RehearsalMembers.Add(new RehearsalMember { Rehearsal = rehearsal, MemberId = memberId });
+                }
+                foreach (var employeeId in rehearsalViewModel.EmployeeIds)
+                {
+                    rehearsal.RehearsalEmployees.Add(new RehearsalEmployee { Rehearsal = rehearsal, EmployeeId = employeeId });
+                }
                 _context.Add(rehearsal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
