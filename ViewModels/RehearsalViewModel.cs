@@ -4,6 +4,7 @@ namespace TkanicaWebApp.ViewModels
 {
     public class RehearsalViewModel
     {
+        public int? Id { get; set; }
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public List<int> MemberGroupIds { get; set; }

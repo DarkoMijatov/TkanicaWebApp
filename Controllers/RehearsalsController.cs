@@ -67,7 +67,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Date,EmployeeIds,MemberIds")] RehearsalViewModel rehearsalViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Date,EmployeeIds,MemberIds")] RehearsalViewModel rehearsalViewModel)
         {
             var rehearsal = new Rehearsal();
             if (ModelState.IsValid)
@@ -75,13 +75,19 @@ namespace TkanicaWebApp.Controllers
                 rehearsal.Date = rehearsalViewModel.Date;
                 rehearsal.RehearsalMembers = new List<RehearsalMember>();
                 rehearsal.RehearsalEmployees = new List<RehearsalEmployee>();
-                foreach(var memberId in rehearsalViewModel.MemberIds)
+                if (rehearsalViewModel.MemberIds != null && rehearsalViewModel.MemberIds.Any())
                 {
-                    rehearsal.RehearsalMembers.Add(new RehearsalMember { Rehearsal = rehearsal, MemberId = memberId });
+                    foreach (var memberId in rehearsalViewModel.MemberIds)
+                    {
+                        rehearsal.RehearsalMembers.Add(new RehearsalMember { Rehearsal = rehearsal, MemberId = memberId });
+                    }
                 }
-                foreach (var employeeId in rehearsalViewModel.EmployeeIds)
+                if (rehearsalViewModel.EmployeeIds != null && rehearsalViewModel.EmployeeIds.Any())
                 {
-                    rehearsal.RehearsalEmployees.Add(new RehearsalEmployee { Rehearsal = rehearsal, EmployeeId = employeeId });
+                    foreach (var employeeId in rehearsalViewModel.EmployeeIds)
+                    {
+                        rehearsal.RehearsalEmployees.Add(new RehearsalEmployee { Rehearsal = rehearsal, EmployeeId = employeeId });
+                    }
                 }
                 _context.Add(rehearsal);
                 await _context.SaveChangesAsync();
@@ -98,15 +104,28 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var rehearsal = await _context.Rehearsal.FindAsync(id);
+            var rehearsal = await _context.Rehearsal
+                .Include(x => x.RehearsalEmployees)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalEmployees.Employee")
+                .Include("RehearsalMembers.Member")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
+                .FirstOrDefaultAsync(m => m.Id == id);
+            var rehearsalViewModel = new RehearsalViewModel
+            {
+                Id = rehearsal.Id,
+                Date = rehearsal.Date,
+                EmployeeIds = rehearsal.RehearsalEmployees.Select(x => x.EmployeeId).ToList(),
+                MemberIds = rehearsal.RehearsalMembers.Select(x => x.MemberId).ToList()
+            };
             if (rehearsal == null)
             {
                 return NotFound();
             }
-            ViewData["MemberGroupId"] = new SelectList(_context.MemberGroup, "Id", "Name");
-            ViewData["Employees"] = new SelectList(_context.EmployeeMemberGroup, "EmployeeId", "FullName");
-            ViewData["Members"] = new SelectList(_context.Member, "Id", "FullName");
-            return View(rehearsal);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId));
+            ViewData["MemberId"] = new SelectList(_context.Member.Where(x => x.Active), "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId));
+            return View(rehearsalViewModel);
         }
 
         // POST: Rehearsals/Edit/5
@@ -114,9 +133,17 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,CreatedAt,UpdatedAt")] Rehearsal rehearsal, [Bind("EmployeeId")] List<RehearsalEmployee> rehearsalEmployees, [Bind("MemberId")] List<RehearsalMember> rehearsalMembers)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,EmployeeIds,MemberIds")] RehearsalViewModel rehearsalViewModel)
         {
-            if (id != rehearsal.Id)
+            var rehearsal = await _context.Rehearsal
+                .Include(x => x.RehearsalEmployees)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalEmployees.Employee")
+                .Include("RehearsalMembers.Member")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (id != rehearsalViewModel.Id)
             {
                 return NotFound();
             }
@@ -125,14 +152,30 @@ namespace TkanicaWebApp.Controllers
             {
                 try
                 {
-                    rehearsal.RehearsalMembers = rehearsalMembers;
-                    rehearsal.RehearsalEmployees = rehearsalEmployees;
+                    
+                    rehearsal.Date = rehearsalViewModel.Date;
+                    _context.RehearsalEmployee.RemoveRange(rehearsal.RehearsalEmployees);
+                    _context.RehearsalMember.RemoveRange(rehearsal.RehearsalMembers);
+                    if (rehearsalViewModel.MemberIds != null && rehearsalViewModel.MemberIds.Any())
+                    {
+                        foreach (var memberId in rehearsalViewModel.MemberIds)
+                        {
+                            rehearsal.RehearsalMembers.Add(new RehearsalMember { Rehearsal = rehearsal, MemberId = memberId });
+                        }
+                    }
+                    if (rehearsalViewModel.EmployeeIds != null && rehearsalViewModel.EmployeeIds.Any())
+                    {
+                        foreach (var employeeId in rehearsalViewModel.EmployeeIds)
+                        {
+                            rehearsal.RehearsalEmployees.Add(new RehearsalEmployee { Rehearsal = rehearsal, EmployeeId = employeeId });
+                        }
+                    }
                     _context.Update(rehearsal);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RehearsalExists(rehearsal.Id))
+                    if (!RehearsalExists(rehearsalViewModel.Id.Value))
                     {
                         return NotFound();
                     }
@@ -160,7 +203,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("RehearsalEmployees.Employee")
                 .Include("RehearsalMembers.Member")
                 .Include("RehearsalMembers.Member.MembershipFee")
-                 .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rehearsal == null)
             {
