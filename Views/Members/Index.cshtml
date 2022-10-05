@@ -42,13 +42,16 @@
             <th>
                 Iznos članarine
             </th>
+            <th>
+                Broj proba
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
             string active = item.Active ? "da" : "ne";
-
+            int rehearsalCount = item.RehearsalMembers.Count;
             <tr>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
@@ -79,6 +82,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MembershipFee.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rehearsalCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |

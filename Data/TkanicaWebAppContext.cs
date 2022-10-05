@@ -18,9 +18,13 @@ namespace TkanicaWebApp.Data
         public DbSet<EmployeeMemberGroup> EmployeeMemberGroup { get; set; }
         public DbSet<PayPeriod> PayPeriod { get; set; }
         public DbSet<EarningType> EarningType { get; set; }
+        public DbSet<Rehearsal> Rehearsal { get; set; }
+        public DbSet<RehearsalEmployee> RehearsalEmployee { get; set; }
+        public DbSet<RehearsalMember> RehearsalMember { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.UseCollation("Serbian_Latin_100_CI_AI_KS_WS_SC_UTF8");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 

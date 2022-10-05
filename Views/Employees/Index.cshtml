@@ -48,6 +48,9 @@
             <th>
                 Broj grupa članova
             </th>
+            <th>
+                Broj proba
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -56,6 +59,7 @@
             int groupsCount = item.EmployeeMemberGroups.Count;
             string earningType = item.EarningType.Name;
             string payPeriod = item.PayPeriod.Name;
+            int rehearsalsCount = item.RehearsalEmployees.Count;
             <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -92,6 +96,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => groupsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rehearsalsCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |

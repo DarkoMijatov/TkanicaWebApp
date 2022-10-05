@@ -3,20 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TkanicaWebApp.Data;
 
 #nullable disable
 
-namespace TkanicaWebApp.Data.Migrations
+namespace TkanicaWebApp.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    partial class TkanicaWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20220930003510_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseCollation("Serbian_Latin_100_CI_AI_KS_WS_SC_UTF8")
                 .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -249,32 +252,6 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MemberGroup");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = true,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rekreativna grupa",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.MembershipFee", b =>
@@ -306,44 +283,6 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasIndex("MemberGroupId");
 
                     b.ToTable("MembershipFee");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 1000m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 1,
-                            Name = "Prvi ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 500m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 1,
-                            Name = "Prvi ansambl popust",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 800m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 2,
-                            Name = "Dečji ansambl",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 400m,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberGroupId = 2,
-                            Name = "Dečji ansambl popust",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.PayPeriod", b =>
@@ -389,6 +328,86 @@ namespace TkanicaWebApp.Data.Migrations
                             Name = "mesečno",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Rehearsal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rehearsal");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RehearsalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("RehearsalId");
+
+                    b.ToTable("RehearsalEmployee");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RehearsalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("RehearsalId");
+
+                    b.ToTable("RehearsalMember");
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.Employee", b =>
@@ -451,6 +470,44 @@ namespace TkanicaWebApp.Data.Migrations
                     b.Navigation("MemberGroup");
                 });
 
+            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalEmployee", b =>
+                {
+                    b.HasOne("TkanicaWebApp.Models.Employee", "Employee")
+                        .WithMany("RehearsalEmployees")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TkanicaWebApp.Models.Rehearsal", "Rehearsal")
+                        .WithMany("RehearsalEmployees")
+                        .HasForeignKey("RehearsalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Rehearsal");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.RehearsalMember", b =>
+                {
+                    b.HasOne("TkanicaWebApp.Models.Member", "Member")
+                        .WithMany("RehearsalMembers")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TkanicaWebApp.Models.Rehearsal", "Rehearsal")
+                        .WithMany("RehearsalMembers")
+                        .HasForeignKey("RehearsalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Rehearsal");
+                });
+
             modelBuilder.Entity("TkanicaWebApp.Models.EarningType", b =>
                 {
                     b.Navigation("Employees");
@@ -459,6 +516,13 @@ namespace TkanicaWebApp.Data.Migrations
             modelBuilder.Entity("TkanicaWebApp.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeMemberGroups");
+
+                    b.Navigation("RehearsalEmployees");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Member", b =>
+                {
+                    b.Navigation("RehearsalMembers");
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.MemberGroup", b =>
@@ -476,6 +540,13 @@ namespace TkanicaWebApp.Data.Migrations
             modelBuilder.Entity("TkanicaWebApp.Models.PayPeriod", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Rehearsal", b =>
+                {
+                    b.Navigation("RehearsalEmployees");
+
+                    b.Navigation("RehearsalMembers");
                 });
 #pragma warning restore 612, 618
         }

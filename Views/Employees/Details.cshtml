@@ -4,6 +4,8 @@
     ViewData["Title"] = "Podaci o zaposlenom";
     var earningType = Model.EarningType.Name;
     var payPeriod = Model.PayPeriod.Name;
+    int rehearsalsCount = Model.RehearsalEmployees.Count;
+    List<Rehearsal> rehearsals = Model.RehearsalEmployees.Select(x => x.Rehearsal).ToList();
 }
 
 <h1>Podaci o zaposlenom</h1>
@@ -90,7 +92,7 @@
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
         <dt class="col-sm-2">
-            Grupe članova
+            Grupe članova:
         </dt>
         <dd class="col-sm-10">
             <ul>
@@ -102,11 +104,30 @@
                     </li>
                 }
             </ul>
-            @Html.DisplayFor(model => model.UpdatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Broj proba
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => rehearsalsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Probe:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var rehearsal in rehearsals)
+                {
+                    string name = $"{rehearsal.Date.ToString("d")} ({rehearsal.RehearsalMembers.First().Member.MembershipFee.MemberGroup.Name})";
+                    <li>
+                        <a asp-controller="Rehearsals" asp-action="Details" asp-route-id="@rehearsal.Id">@Html.DisplayFor(model => name)</a>
+                    </li>
+                }
+            </ul>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
 </div>
