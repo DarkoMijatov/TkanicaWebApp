@@ -26,6 +26,8 @@ namespace TkanicaWebApp.Controllers
                   .Include(x => x.EmployeeMemberGroups)
                   .Include(x => x.EarningType)
                   .Include(x => x.PayPeriod)
+                  .Include(x => x.RehearsalEmployees)
+                  .Include("RehearsalEmployees.Rehearsal")
                   .ToListAsync());
         }
 
@@ -42,6 +44,12 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.PayPeriod)
                 .Include(x => x.EmployeeMemberGroups)
                 .Include("EmployeeMemberGroups.MemberGroup")
+                .Include(x => x.RehearsalEmployees)
+                .Include("RehearsalEmployees.Rehearsal")
+                .Include("RehearsalEmployees.Rehearsal.RehearsalMembers")
+                .Include("RehearsalEmployees.Rehearsal.RehearsalMembers.Member")
+                .Include("RehearsalEmployees.Rehearsal.RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalEmployees.Rehearsal.RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {

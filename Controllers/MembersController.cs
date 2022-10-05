@@ -18,7 +18,10 @@ namespace TkanicaWebApp.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var tkanicaWebAppContext = _context.Member.Include(m => m.MembershipFee).Include(x => x.MembershipFee.MemberGroup);
+            var tkanicaWebAppContext = _context.Member
+                .Include(m => m.MembershipFee)
+                .Include(x => x.MembershipFee.MemberGroup)
+                .Include(x => x.RehearsalMembers);
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -33,6 +36,8 @@ namespace TkanicaWebApp.Controllers
             var member = await _context.Member
                 .Include(m => m.MembershipFee)
                 .Include(x => x.MembershipFee.MemberGroup)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalMembers.Rehearsal")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
@@ -129,6 +134,8 @@ namespace TkanicaWebApp.Controllers
 
             var member = await _context.Member
                 .Include(m => m.MembershipFee)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalMembers.Rehearsal")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
