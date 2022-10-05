@@ -26,6 +26,7 @@ namespace TkanicaWebApp.Controllers
                 .Include(m => m.MembershipFees)
                 .Include("MembershipFees.Members")
                 .Include(x => x.EmployeeMemberGroups)
+                .Include("MembershipFees.Members.RehearsalMembers")
                 .ToListAsync());
         }
 
@@ -37,9 +38,12 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
             var memberGroup = await _context.MemberGroup
-                .Include(m => m.MembershipFees).Include("MembershipFees.Members")
+                .Include(m => m.MembershipFees)
+                .Include("MembershipFees.Members")
                 .Include(x => x.EmployeeMemberGroups)
                 .Include("EmployeeMemberGroups.Employee")
+                .Include("MembershipFees.Members.RehearsalMembers")
+                .Include("MembershipFees.Members.RehearsalMembers.Rehearsal")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (memberGroup == null)
             {

@@ -33,6 +33,9 @@
             <th>
                 Broj zaposlenih
             </th>
+            <th>
+                Broj proba
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +45,7 @@
             int activeCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count(x => x.Active);
             int totalCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count();
             int employeeCount = item.EmployeeMemberGroups.Count;
+            int rehearsalCount = item.MembershipFees.SelectMany(x => x.Members).SelectMany(x => x.RehearsalMembers).ToList().DistinctBy(x => x.RehearsalId).Count();
             <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -63,6 +67,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => employeeCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rehearsalCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
