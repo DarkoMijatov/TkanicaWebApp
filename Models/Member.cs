@@ -23,30 +23,30 @@ namespace TkanicaWebApp.Models
         public string Phone { get; set; }
         [DataType(DataType.EmailAddress)]
         [Column(TypeName = "varchar(50)")]
-        public string? Email { get; set; }
+        public string Email { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(100)")]
-        public string? Address { get; set; }
+        public string Address { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(50)")]
-        public string? City { get; set; }
+        public string City { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(100)")]
-        public string? School { get; set; }
+        public string School { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(20)")]
-        public string? Class { get; set; }
+        public string Class { get; set; }
         public int? YearsOfExperience { get; set; }
         [DataType(DataType.Url)]
         [Column(TypeName = "varchar(150)")]
-        public string? FacebookProfileUrl { get; set; }
+        public string FacebookProfileUrl { get; set; }
         [DataType(DataType.Url)]
         [Column(TypeName = "varchar(150)")]
-        public string? InstagramProfileUrl { get; set; }
+        public string InstagramProfileUrl { get; set; }
         [DataType(DataType.Url)]
         [Column(TypeName = "varchar(150)")]
-        public string? TikTokProfileUrl { get; set; }
-        public byte[]? ProfilePicture { get; set; }
+        public string TikTokProfileUrl { get; set; }
+        public byte[] ProfilePicture { get; set; }
         public int MembershipFeeId { get; set; }
         public MembershipFee MembershipFee { get; set; }
         [DataType(DataType.DateTime)]
@@ -54,6 +54,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         public List<RehearsalMember> RehearsalMembers { get; set; }
+        public List<Transaction> Transactions { get; set; }
         [NotMapped]
         public string FullName { get => $"{FirstName} {LastName}"; }
     }

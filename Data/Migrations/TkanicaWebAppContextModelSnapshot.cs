@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TkanicaWebApp.Data;
 
@@ -12,10 +11,9 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    [Migration("20220930003510_InitialMigration")]
-    partial class InitialMigration
+    partial class TkanicaWebAppContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +22,210 @@ namespace TkanicaWebApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("TkanicaWebApp.Models.AccountNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BalanceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Bank")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreditorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DebtorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreditorId");
+
+                    b.HasIndex("DebtorId");
+
+                    b.ToTable("AccountNumber");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BalanceId = 2,
+                            Bank = "Poštanska štedionica A.D.",
+                            BankAccountNumber = "200-3169580101844-71",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BalanceId = 3,
+                            Bank = "Uprava za trezor",
+                            BankAccountNumber = "840-49151763-68",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Balance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("AccountNumberId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCash")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountNumberId")
+                        .IsUnique()
+                        .HasFilter("[AccountNumberId] IS NOT NULL");
+
+                    b.ToTable("Balance");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCash = true,
+                            Name = "kasa",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountNumberId = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCash = false,
+                            Name = "račun banka",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountNumberId = 2,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCash = false,
+                            Name = "račun trezor",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Creditor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<bool>("IsCompany")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Creditor");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Debtor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<bool>("IsCompany")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Debtor");
+                });
 
             modelBuilder.Entity("TkanicaWebApp.Models.EarningType", b =>
                 {
@@ -410,6 +612,184 @@ namespace TkanicaWebApp.Migrations
                     b.ToTable("RehearsalMember");
                 });
 
+            modelBuilder.Entity("TkanicaWebApp.Models.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(14,2)");
+
+                    b.Property<int>("BalanceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreditorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DebtorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReferenceNumber")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionNumber")
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int?>("TransactionTypeId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BalanceId");
+
+                    b.HasIndex("CreditorId");
+
+                    b.HasIndex("DebtorId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("TransactionTypeId");
+
+                    b.ToTable("Transaction");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.TransactionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short>("Direction")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)1,
+                            Name = "članarina",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)-1,
+                            Name = "zarada",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)1,
+                            Name = "donacija",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)1,
+                            Name = "uplata gotovine",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)-1,
+                            Name = "isplata gotovine",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)1,
+                            Name = "priliv na račun",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Direction = (short)-1,
+                            Name = "odliv sa računa",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.AccountNumber", b =>
+                {
+                    b.HasOne("TkanicaWebApp.Models.Creditor", "Creditor")
+                        .WithMany("AccountNumbers")
+                        .HasForeignKey("CreditorId");
+
+                    b.HasOne("TkanicaWebApp.Models.Debtor", "Debtor")
+                        .WithMany("AccountNumbers")
+                        .HasForeignKey("DebtorId");
+
+                    b.Navigation("Creditor");
+
+                    b.Navigation("Debtor");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Balance", b =>
+                {
+                    b.HasOne("TkanicaWebApp.Models.AccountNumber", "AccountNumber")
+                        .WithOne("Balance")
+                        .HasForeignKey("TkanicaWebApp.Models.Balance", "AccountNumberId");
+
+                    b.Navigation("AccountNumber");
+                });
+
             modelBuilder.Entity("TkanicaWebApp.Models.Employee", b =>
                 {
                     b.HasOne("TkanicaWebApp.Models.EarningType", "EarningType")
@@ -508,6 +888,73 @@ namespace TkanicaWebApp.Migrations
                     b.Navigation("Rehearsal");
                 });
 
+            modelBuilder.Entity("TkanicaWebApp.Models.Transaction", b =>
+                {
+                    b.HasOne("TkanicaWebApp.Models.Balance", "Balance")
+                        .WithMany("Transactions")
+                        .HasForeignKey("BalanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TkanicaWebApp.Models.Creditor", "Creditor")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CreditorId");
+
+                    b.HasOne("TkanicaWebApp.Models.Debtor", "Debtor")
+                        .WithMany("Transactions")
+                        .HasForeignKey("DebtorId");
+
+                    b.HasOne("TkanicaWebApp.Models.Employee", "Employee")
+                        .WithMany("Transactions")
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("TkanicaWebApp.Models.Member", "Member")
+                        .WithMany("Transactions")
+                        .HasForeignKey("MemberId");
+
+                    b.HasOne("TkanicaWebApp.Models.TransactionType", "TransactionType")
+                        .WithMany("Transactions")
+                        .HasForeignKey("TransactionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Balance");
+
+                    b.Navigation("Creditor");
+
+                    b.Navigation("Debtor");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("TransactionType");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.AccountNumber", b =>
+                {
+                    b.Navigation("Balance");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Balance", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Creditor", b =>
+                {
+                    b.Navigation("AccountNumbers");
+
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.Debtor", b =>
+                {
+                    b.Navigation("AccountNumbers");
+
+                    b.Navigation("Transactions");
+                });
+
             modelBuilder.Entity("TkanicaWebApp.Models.EarningType", b =>
                 {
                     b.Navigation("Employees");
@@ -518,11 +965,15 @@ namespace TkanicaWebApp.Migrations
                     b.Navigation("EmployeeMemberGroups");
 
                     b.Navigation("RehearsalEmployees");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.Member", b =>
                 {
                     b.Navigation("RehearsalMembers");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.MemberGroup", b =>
@@ -547,6 +998,11 @@ namespace TkanicaWebApp.Migrations
                     b.Navigation("RehearsalEmployees");
 
                     b.Navigation("RehearsalMembers");
+                });
+
+            modelBuilder.Entity("TkanicaWebApp.Models.TransactionType", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }
