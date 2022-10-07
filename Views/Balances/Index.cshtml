@@ -1,46 +1,61 @@
 ﻿@model IEnumerable<TkanicaWebApp.Models.Balance>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista računa";
 }
 
-<h1>Index</h1>
+<h1>Lista računa</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Naziv
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AccountNumber)
+                Broj računa
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsCash)
+                Keš
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                Broj transakcija
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
+                Stanje
+            </th>
+            <th>
+                Datum kreiranja
+            </th>
+            <th>
+                Datum izmene
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
+    string isCash = item.IsCash ? "da" : "ne";
+    int transactionsCount = item.Transactions.Count;
+    decimal balanceAmount = item.Transactions.Sum(x => x.Amount * x.TransactionType.Direction);
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AccountNumber.Id)
+                @Html.DisplayFor(modelItem => item.AccountNumber.BankAccountNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsCash)
+                @Html.DisplayFor(modelItem => isCash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => transactionsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => balanceAmount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -49,9 +64,8 @@
                 @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
             </td>
         </tr>
 }

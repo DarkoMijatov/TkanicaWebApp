@@ -22,7 +22,10 @@ namespace TkanicaWebApp.Controllers
         // GET: Balances
         public async Task<IActionResult> Index()
         {
-            var tkanicaWebAppContext = _context.Balance.Include(b => b.AccountNumber);
+            var tkanicaWebAppContext = _context.Balance
+                .Include(b => b.AccountNumber)
+                .Include(b => b.Transactions)
+                .Include("Transactions.TransactionType");
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -36,6 +39,8 @@ namespace TkanicaWebApp.Controllers
 
             var balance = await _context.Balance
                 .Include(b => b.AccountNumber)
+                .Include(b => b.Transactions)
+                .Include("Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (balance == null)
             {
@@ -48,7 +53,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Balances/Create
         public IActionResult Create()
         {
-            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber, "Id", "Id");
+            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber
+                .Where(x => x.BalanceId == null && x.CreditorId == null && x.DebtorId == null), "Id", "BankAccountNumber");
             return View();
         }
 
@@ -57,15 +63,18 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,AccountNumberId,IsCash,CreatedAt,UpdatedAt")] Balance balance)
+        public async Task<IActionResult> Create([Bind("Id,Name,AccountNumberId,IsCash")] Balance balance)
         {
             if (ModelState.IsValid)
             {
+                if (balance.IsCash)
+                    balance.AccountNumberId = null;
                 _context.Add(balance);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber, "Id", "Id", balance.AccountNumberId);
+            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber
+                .Where(x => x.BalanceId == null && x.CreditorId == null && x.DebtorId == null), "Id", "BankAccountNumber");
             return View(balance);
         }
 
@@ -77,12 +86,15 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var balance = await _context.Balance.FindAsync(id);
+            var balance = await _context.Balance
+               .Include(b => b.AccountNumber)
+               .Include(b => b.Transactions)
+               .Include("Transactions.TransactionType")
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (balance == null)
             {
                 return NotFound();
             }
-            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber, "Id", "Id", balance.AccountNumberId);
             return View(balance);
         }
 
@@ -91,7 +103,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AccountNumberId,IsCash,CreatedAt,UpdatedAt")] Balance balance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name","IsCash","AccountNumberId")] Balance balance)
         {
             if (id != balance.Id)
             {
@@ -118,7 +130,6 @@ namespace TkanicaWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber, "Id", "Id", balance.AccountNumberId);
             return View(balance);
         }
 
@@ -131,8 +142,10 @@ namespace TkanicaWebApp.Controllers
             }
 
             var balance = await _context.Balance
-                .Include(b => b.AccountNumber)
-                .FirstOrDefaultAsync(m => m.Id == id);
+               .Include(b => b.AccountNumber)
+               .Include(b => b.Transactions)
+               .Include("Transactions.TransactionType")
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (balance == null)
             {
                 return NotFound();
@@ -150,7 +163,11 @@ namespace TkanicaWebApp.Controllers
             {
                 return Problem("Entity set 'TkanicaWebAppContext.Balance'  is null.");
             }
-            var balance = await _context.Balance.FindAsync(id);
+            var balance = await _context.Balance
+               .Include(b => b.AccountNumber)
+               .Include(b => b.Transactions)
+               .Include("Transactions.TransactionType")
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (balance != null)
             {
                 _context.Balance.Remove(balance);
