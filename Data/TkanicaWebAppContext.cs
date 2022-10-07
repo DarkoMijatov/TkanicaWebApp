@@ -21,6 +21,12 @@ namespace TkanicaWebApp.Data
         public DbSet<Rehearsal> Rehearsal { get; set; }
         public DbSet<RehearsalEmployee> RehearsalEmployee { get; set; }
         public DbSet<RehearsalMember> RehearsalMember { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<TransactionType> TransactionType { get; set; }
+        public DbSet<Balance> Balance { get; set; }
+        public DbSet<AccountNumber> AccountNumber { get; set; }
+        public DbSet<Creditor> Creditor { get; set; }
+        public DbSet<Debtor> Debtor { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
