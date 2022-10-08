@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
@@ -22,7 +18,13 @@ namespace TkanicaWebApp.Controllers
         // GET: AccountNumbers
         public async Task<IActionResult> Index()
         {
-            var tkanicaWebAppContext = _context.AccountNumber.Include(a => a.Creditor).Include(a => a.Debtor);
+            var tkanicaWebAppContext = _context.AccountNumber
+                .Include(a => a.Creditor)
+                .Include("Creditor.Transactions")
+                .Include(a => a.Debtor)
+                .Include("Debtor.Transactions")
+                .Include(a => a.Balance)
+                .Include("Balance.Transactions");
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -36,7 +38,11 @@ namespace TkanicaWebApp.Controllers
 
             var accountNumber = await _context.AccountNumber
                 .Include(a => a.Creditor)
+                .Include("Creditor.Transactions")
                 .Include(a => a.Debtor)
+                .Include("Debtor.Transactions")
+                .Include(a => a.Balance)
+                .Include("Balance.Transactions")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber == null)
             {
@@ -49,8 +55,6 @@ namespace TkanicaWebApp.Controllers
         // GET: AccountNumbers/Create
         public IActionResult Create()
         {
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id");
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id");
             return View();
         }
 
@@ -59,7 +63,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BankAccountNumber,Bank,CreditorId,DebtorId,BalanceId,CreatedAt,UpdatedAt")] AccountNumber accountNumber)
+        public async Task<IActionResult> Create([Bind("Id,BankAccountNumber,Bank")] AccountNumber accountNumber)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +71,6 @@ namespace TkanicaWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", accountNumber.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", accountNumber.DebtorId);
             return View(accountNumber);
         }
 
@@ -80,13 +82,12 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var accountNumber = await _context.AccountNumber.FindAsync(id);
+            var accountNumber = await _context.AccountNumber
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber == null)
             {
                 return NotFound();
             }
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", accountNumber.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", accountNumber.DebtorId);
             return View(accountNumber);
         }
 
@@ -95,7 +96,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BankAccountNumber,Bank,CreditorId,DebtorId,BalanceId,CreatedAt,UpdatedAt")] AccountNumber accountNumber)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BankAccountNumber,Bank")] AccountNumber accountNumber)
         {
             if (id != accountNumber.Id)
             {
@@ -122,8 +123,6 @@ namespace TkanicaWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", accountNumber.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", accountNumber.DebtorId);
             return View(accountNumber);
         }
 
@@ -137,7 +136,11 @@ namespace TkanicaWebApp.Controllers
 
             var accountNumber = await _context.AccountNumber
                 .Include(a => a.Creditor)
+                .Include("Creditor.Transactions")
                 .Include(a => a.Debtor)
+                .Include("Debtor.Transactions")
+                .Include(a => a.Balance)
+                .Include("Balance.Transactions")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber == null)
             {
@@ -156,7 +159,14 @@ namespace TkanicaWebApp.Controllers
             {
                 return Problem("Entity set 'TkanicaWebAppContext.AccountNumber'  is null.");
             }
-            var accountNumber = await _context.AccountNumber.FindAsync(id);
+            var accountNumber = await _context.AccountNumber
+                .Include(a => a.Creditor)
+                .Include("Creditor.Transactions")
+                .Include(a => a.Debtor)
+                .Include("Debtor.Transactions")
+                .Include(a => a.Balance)
+                .Include("Balance.Transactions")
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber != null)
             {
                 _context.AccountNumber.Remove(accountNumber);

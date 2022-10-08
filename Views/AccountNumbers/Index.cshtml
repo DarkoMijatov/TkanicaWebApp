@@ -1,44 +1,43 @@
 ﻿@model IEnumerable<TkanicaWebApp.Models.AccountNumber>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista brojeva računa";
 }
 
-<h1>Index</h1>
+<h1>Lista brojeva računa</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.BankAccountNumber)
+                Broj računa
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bank)
+                Banka
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Creditor)
+                Vlasnik
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Debtor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BalanceId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
+                Broj transakcija
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+    string owner = item.CreditorId != null ?
+        item.Creditor.Name : item.DebtorId != null ?
+        item.Debtor.Name : item.BalanceId != null ?
+        item.Balance.Name : "Nema vlasnika";
+    int transactionsCount = item.CreditorId != null ?
+        item.Creditor.Transactions.Count : item.DebtorId != null ?
+        item.Debtor.Transactions.Count : item.BalanceId != null ?
+        item.Balance.Transactions.Count : 0;
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.BankAccountNumber)
             </td>
@@ -46,24 +45,15 @@
                 @Html.DisplayFor(modelItem => item.Bank)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Creditor.Id)
+                @Html.DisplayFor(modelItem => owner)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Debtor.Id)
+                @Html.DisplayFor(modelItem => transactionsCount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BalanceId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
             </td>
         </tr>
 }

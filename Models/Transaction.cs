@@ -11,7 +11,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(20)")]
         public string TransactionNumber { get; set; }
-        public int? TransactionTypeId { get; set; }
+        public int TransactionTypeId { get; set; }
         public TransactionType TransactionType { get; set; }
         public int? DebtorId { get; set; }
         public Debtor Debtor { get; set; }
