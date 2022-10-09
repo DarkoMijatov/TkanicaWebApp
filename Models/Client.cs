@@ -24,12 +24,16 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.EmailAddress)]
         [Column(TypeName = "varchar(30)")]
         public string Email { get; set; }
+        [DataType(DataType.Url)]
+        [Column(TypeName = "varchar(100)")]
+        public string Website { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(10)")]
         public string IdNumber { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(10)")]
         public string TaxNumber { get; set; }
+        public byte[] Logo { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         [DataType(DataType.DateTime)]

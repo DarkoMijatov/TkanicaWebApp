@@ -20,7 +20,8 @@ namespace TkanicaWebApp.Controllers
         {
             var tkanicaWebAppContext = _context.AccountNumber
                 .Include(a => a.Client)
-                .Include("Client.Transactions")
+                .Include("Client.CreditorTransactions")
+                .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions");
             return View(await tkanicaWebAppContext.ToListAsync());
@@ -36,7 +37,8 @@ namespace TkanicaWebApp.Controllers
 
             var accountNumber = await _context.AccountNumber
                 .Include(a => a.Client)
-                .Include("Client.Transactions")
+                .Include("Client.CreditorTransactions")
+                .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -132,7 +134,8 @@ namespace TkanicaWebApp.Controllers
 
             var accountNumber = await _context.AccountNumber
                 .Include(a => a.Client)
-                .Include("Client.Transactions")
+                .Include("Client.CreditorTransactions")
+                .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -155,7 +158,8 @@ namespace TkanicaWebApp.Controllers
             }
             var accountNumber = await _context.AccountNumber
                 .Include(a => a.Client)
-                .Include("Client.Transactions")
+                .Include("Client.CreditorTransactions")
+                .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
                 .FirstOrDefaultAsync(m => m.Id == id);

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<TkanicaWebApp.Models.Client>
+
+@{
+    ViewData["Title"] = "Lista klijenata";
+}
+
+<h1>Lista klijenata</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Naziv
+            </th>
+            <th>
+                Pravno lice
+            </th>
+            <th>
+                Adresa
+            </th>
+            <th>
+                Grad
+            </th>
+            <th>
+                Telefon
+            </th>
+            <th>
+                E-mail
+            </th>
+            <th>
+                Web sajt
+            </th>
+            <th>
+                Matični broj
+            </th>
+            <th>
+                Poreski broj
+            </th>
+            <th>
+                Broj računa
+            </th>
+            <th>
+                Broj dolaznih transakcija
+            </th>
+            <th>
+                Broj odlaznih transakcija
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        int accountNumbersCount = item.AccountNumbers.Count;
+        int debtorTransactionsCount = item.DebtorTransactions.Count;
+        int creditorTransactionsCount = item.CreditorTransactions.Count;
+        string isCompany = item.IsCompany ? "da" : "ne";
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => isCompany)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Website)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => accountNumbersCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => creditorTransactionsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => debtorTransactionsCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
