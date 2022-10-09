@@ -8,12 +8,9 @@ namespace TkanicaWebApp.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<AccountNumber> builder)
         {
-            builder.HasOne(x => x.Creditor)
+            builder.HasOne(x => x.Client)
                 .WithMany(x => x.AccountNumbers)
-                .HasForeignKey(x => x.CreditorId);
-            builder.HasOne(x => x.Debtor)
-                .WithMany(x => x.AccountNumbers)
-                .HasForeignKey(x => x.DebtorId);
+                .HasForeignKey(x => x.ClientId);
             builder.HasOne(x => x.Balance)
                 .WithOne(x => x.AccountNumber)
                 .HasForeignKey<AccountNumber>(x => x.BalanceId);

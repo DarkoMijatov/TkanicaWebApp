@@ -29,13 +29,11 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-    string owner = item.CreditorId != null ?
-        item.Creditor.Name : item.DebtorId != null ?
-        item.Debtor.Name : item.BalanceId != null ?
+    string owner = item.ClientId != null ?
+        item.Client.Name : item.BalanceId != null ?
         item.Balance.Name : "Nema vlasnika";
-    int transactionsCount = item.CreditorId != null ?
-        item.Creditor.Transactions.Count : item.DebtorId != null ?
-        item.Debtor.Transactions.Count : item.BalanceId != null ?
+    int transactionsCount = item.ClientId != null ?
+        item.Client.CreditorTransactions.Count + item.Client.DebtorTransactions.Count : item.BalanceId != null ?
         item.Balance.Transactions.Count : 0;
             <tr>
             <td>

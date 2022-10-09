@@ -54,7 +54,7 @@ namespace TkanicaWebApp.Controllers
         public IActionResult Create()
         {
             ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber
-                .Where(x => x.BalanceId == null && x.CreditorId == null && x.DebtorId == null), "Id", "BankAccountNumber");
+                .Where(x => x.BalanceId == null && x.ClientId == null), "Id", "BankAccountNumber");
             return View();
         }
 
@@ -74,7 +74,7 @@ namespace TkanicaWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AccountNumberId"] = new SelectList(_context.AccountNumber
-                .Where(x => x.BalanceId == null && x.CreditorId == null && x.DebtorId == null), "Id", "BankAccountNumber");
+                .Where(x => x.BalanceId == null && x.ClientId == null), "Id", "BankAccountNumber");
             return View(balance);
         }
 

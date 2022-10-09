@@ -14,10 +14,8 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(30)")]
         public string Bank { get; set; }
-        public int? CreditorId { get; set; }
-        public Creditor Creditor { get; set; }
-        public int? DebtorId { get; set; }
-        public Debtor Debtor { get; set; }
+        public int? ClientId { get; set; }
+        public Client Client { get; set; }
         public int? BalanceId { get; set; }
         public Balance Balance { get; set; }
         [DataType(DataType.DateTime)]

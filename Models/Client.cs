@@ -5,7 +5,7 @@ using TkanicaWebApp.Interfaces;
 
 namespace TkanicaWebApp.Models
 {
-    public class Creditor : ITrackable
+    public class Client : ITrackable
     {
         public int Id { get; set; }
         [DataType(DataType.Text)]
@@ -34,7 +34,8 @@ namespace TkanicaWebApp.Models
         public DateTime CreatedAt { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
-        public List<Transaction> Transactions { get; set; }
+        public List<Transaction> CreditorTransactions { get; set; }
+        public List<Transaction> DebtorTransactions { get; set; }
         public List<AccountNumber> AccountNumbers { get; set; }
     }
 }

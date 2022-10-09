@@ -14,9 +14,9 @@ namespace TkanicaWebApp.Models
         public int TransactionTypeId { get; set; }
         public TransactionType TransactionType { get; set; }
         public int? DebtorId { get; set; }
-        public Debtor Debtor { get; set; }
+        public Client Debtor { get; set; }
         public int? CreditorId { get; set; }
-        public Creditor Creditor { get; set; }
+        public Client Creditor { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(30)")]
         public string ReferenceNumber { get; set; }

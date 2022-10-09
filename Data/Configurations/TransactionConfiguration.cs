@@ -19,10 +19,10 @@ namespace TkanicaWebApp.Data.Configurations
                 .HasForeignKey(x => x.TransactionTypeId)
                 .IsRequired();
             builder.HasOne(x => x.Creditor)
-                .WithMany(x => x.Transactions)
+                .WithMany(x => x.CreditorTransactions)
                 .HasForeignKey(x => x.CreditorId);
             builder.HasOne(x => x.Debtor)
-                .WithMany(x => x.Transactions)
+                .WithMany(x => x.DebtorTransactions)
                 .HasForeignKey(x => x.DebtorId);
             builder.HasOne(x => x.Balance)
                 .WithMany(x => x.Transactions)

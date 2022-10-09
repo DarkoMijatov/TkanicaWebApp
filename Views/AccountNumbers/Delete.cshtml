@@ -2,13 +2,11 @@
 
 @{
     ViewData["Title"] = "Brisanje broja računa";
-    string owner = Model.CreditorId != null ?
-        Model.Creditor.Name : Model.DebtorId != null ?
-        Model.Debtor.Name : Model.BalanceId != null ?
+    string owner = Model.ClientId != null ?
+        Model.Client.Name : Model.BalanceId != null ?
         Model.Balance.Name : "Nema vlasnika" ;
-    int transactionsCount = Model.CreditorId != null ?
-        Model.Creditor.Transactions.Count : Model.DebtorId != null ?
-        Model.Debtor.Transactions.Count : Model.BalanceId != null ?
+    int transactionsCount = Model.ClientId != null ?
+        Model.Client.CreditorTransactions.Count + Model.Client.DebtorTransactions.Count : Model.BalanceId != null ?
         Model.Balance.Transactions.Count : 0;
 }
 

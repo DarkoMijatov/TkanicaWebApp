@@ -25,8 +25,7 @@ namespace TkanicaWebApp.Data
         public DbSet<TransactionType> TransactionType { get; set; }
         public DbSet<Balance> Balance { get; set; }
         public DbSet<AccountNumber> AccountNumber { get; set; }
-        public DbSet<Creditor> Creditor { get; set; }
-        public DbSet<Debtor> Debtor { get; set; }
+        public DbSet<Client> Client { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

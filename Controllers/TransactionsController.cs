@@ -54,8 +54,8 @@ namespace TkanicaWebApp.Controllers
         public IActionResult Create()
         {
             ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id");
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id");
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id");
+            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id");
+            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id");
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id");
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
             ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id");
@@ -76,8 +76,8 @@ namespace TkanicaWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id", transaction.BalanceId);
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", transaction.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", transaction.DebtorId);
+            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id", transaction.CreditorId);
+            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id", transaction.DebtorId);
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id", transaction.EmployeeId);
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", transaction.MemberId);
             ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id", transaction.TransactionTypeId);
@@ -98,8 +98,8 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
             ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id", transaction.BalanceId);
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", transaction.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", transaction.DebtorId);
+            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id", transaction.CreditorId);
+            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id", transaction.DebtorId);
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id", transaction.EmployeeId);
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", transaction.MemberId);
             ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id", transaction.TransactionTypeId);
@@ -139,8 +139,8 @@ namespace TkanicaWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id", transaction.BalanceId);
-            ViewData["CreditorId"] = new SelectList(_context.Creditor, "Id", "Id", transaction.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Debtor, "Id", "Id", transaction.DebtorId);
+            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id", transaction.CreditorId);
+            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id", transaction.DebtorId);
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id", transaction.EmployeeId);
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", transaction.MemberId);
             ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id", transaction.TransactionTypeId);
