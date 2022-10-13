@@ -22,7 +22,13 @@ namespace TkanicaWebApp.Controllers
         // GET: Transactions
         public async Task<IActionResult> Index()
         {
-            var tkanicaWebAppContext = _context.Transaction.Include(t => t.Balance).Include(t => t.Creditor).Include(t => t.Debtor).Include(t => t.Employee).Include(t => t.Member).Include(t => t.TransactionType);
+            var tkanicaWebAppContext = _context.Transaction
+                .Include(t => t.Balance)
+                .Include(t => t.Creditor)
+                .Include(t => t.Debtor)
+                .Include(t => t.Employee)
+                .Include(t => t.Member)
+                .Include(t => t.TransactionType);
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -36,8 +42,11 @@ namespace TkanicaWebApp.Controllers
 
             var transaction = await _context.Transaction
                 .Include(t => t.Balance)
+                .Include(t => t.Balance.AccountNumber)
                 .Include(t => t.Creditor)
+                .Include(t => t.Creditor.AccountNumbers)
                 .Include(t => t.Debtor)
+                .Include(t => t.Debtor.AccountNumbers)
                 .Include(t => t.Employee)
                 .Include(t => t.Member)
                 .Include(t => t.TransactionType)
@@ -53,12 +62,13 @@ namespace TkanicaWebApp.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
-            ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id");
-            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id");
-            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id");
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id");
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
-            ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id");
+            ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Name", null);
+            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Name", null);
+            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Name", null);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName", null);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", null);
+            ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Name", null);
+            ViewData["TransactionNumber"] = $"{_context.Transaction.Count(x => x.TransactionDate.Year == DateTime.UtcNow.Year) + 1}/{DateTime.UtcNow.Year}";
             return View();
         }
 
@@ -67,20 +77,62 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TransactionNumber,TransactionTypeId,DebtorId,CreditorId,ReferenceNumber,Amount,Description,Paid,TransactionDate,PaidDate,MemberId,EmployeeId,BalanceId,CreatedAt,UpdatedAt")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("Id,TransactionNumber,TransactionTypeId,DebtorId,CreditorId,ReferenceNumber,Amount,Description,Paid,TransactionDate,PaidDate,MemberId,EmployeeId,BalanceId")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
+                if (transaction.TransactionTypeId == 1)
+                {
+                    transaction.DebtorId = null;
+                    transaction.CreditorId = null;
+                    transaction.EmployeeId = null;
+                }
+                else if (transaction.TransactionTypeId == 2)
+                {
+                    transaction.DebtorId = null;
+                    transaction.CreditorId = null;
+                    transaction.MemberId = null;
+                }
+                else if (transaction.TransactionTypeId == 3 && transaction.BalanceId == 1)
+                {
+                    transaction.DebtorId = null;
+                    transaction.CreditorId = null;
+                    transaction.EmployeeId = null;
+                }
+                else if (transaction.TransactionTypeId == 3 && transaction.BalanceId != 1)
+                {
+                    transaction.EmployeeId = null;
+                    transaction.CreditorId = null;
+                    transaction.MemberId = null;
+                }
+                else if (transaction.TransactionTypeId == 4)
+                {
+                    transaction.DebtorId = null;
+                    transaction.CreditorId = null;
+                    transaction.EmployeeId = null;
+                }
+                else if (transaction.TransactionTypeId == 5)
+                {
+                    transaction.DebtorId = null;
+                    transaction.CreditorId = null;
+                    transaction.MemberId = null;
+                }
+                else if (transaction.TransactionTypeId == 6)
+                {
+                    transaction.EmployeeId = null;
+                    transaction.CreditorId = null;
+                    transaction.MemberId = null;
+                }
+                else
+                {
+                    transaction.EmployeeId = null;
+                    transaction.DebtorId = null;
+                    transaction.MemberId = null;
+                }
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["BalanceId"] = new SelectList(_context.Balance, "Id", "Id", transaction.BalanceId);
-            ViewData["CreditorId"] = new SelectList(_context.Client, "Id", "Id", transaction.CreditorId);
-            ViewData["DebtorId"] = new SelectList(_context.Client, "Id", "Id", transaction.DebtorId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id", transaction.EmployeeId);
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", transaction.MemberId);
-            ViewData["TransactionTypeId"] = new SelectList(_context.TransactionType, "Id", "Id", transaction.TransactionTypeId);
+            }        
             return View(transaction);
         }
 
@@ -92,7 +144,17 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var transaction = await _context.Transaction.FindAsync(id);
+            var transaction = await _context.Transaction
+                .Include(t => t.Balance)
+                .Include(t => t.Balance.AccountNumber)
+                .Include(t => t.Creditor)
+                .Include(t => t.Creditor.AccountNumbers)
+                .Include(t => t.Debtor)
+                .Include(t => t.Debtor.AccountNumbers)
+                .Include(t => t.Employee)
+                .Include(t => t.Member)
+                .Include(t => t.TransactionType)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -157,12 +219,15 @@ namespace TkanicaWebApp.Controllers
 
             var transaction = await _context.Transaction
                 .Include(t => t.Balance)
+                .Include(t => t.Balance.AccountNumber)
                 .Include(t => t.Creditor)
+                .Include(t => t.Creditor.AccountNumbers)
                 .Include(t => t.Debtor)
+                .Include(t => t.Debtor.AccountNumbers)
                 .Include(t => t.Employee)
                 .Include(t => t.Member)
                 .Include(t => t.TransactionType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (transaction == null)
             {
                 return NotFound();

@@ -1,95 +1,84 @@
 ﻿@model TkanicaWebApp.Models.Transaction
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nova transakcija";
 }
 
-<h1>Create</h1>
+<h1>Nova transakcija</h1>
 
-<h4>Transaction</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TransactionNumber" class="control-label"></label>
-                <input asp-for="TransactionNumber" class="form-control" />
+                Broj transakcije
+                <input asp-for="TransactionNumber" class="form-control" value=@ViewBag.TransactionNumber />
                 <span asp-validation-for="TransactionNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TransactionTypeId" class="control-label"></label>
+                Vrsta transakcije
                 <select asp-for="TransactionTypeId" class ="form-control" asp-items="ViewBag.TransactionTypeId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DebtorId" class="control-label"></label>
+                Račun
+                <select asp-for="BalanceId" class ="form-control" asp-items="ViewBag.BalanceId"></select>
+            </div>
+            <div class="form-group">
+                Član (za članarine i gotovinske donacije)
+                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
+            </div>
+            <div class="form-group">
+                Zaposleni (za zarade)
+                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
+            </div>
+            <div class="form-group">
+                Uplatilac (za bezgotovinske transakcije)
                 <select asp-for="DebtorId" class ="form-control" asp-items="ViewBag.DebtorId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="CreditorId" class="control-label"></label>
+                Primalac (za bezgotovinske transakcije)
                 <select asp-for="CreditorId" class ="form-control" asp-items="ViewBag.CreditorId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ReferenceNumber" class="control-label"></label>
+                Poziv na broj
                 <input asp-for="ReferenceNumber" class="form-control" />
                 <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
+                Iznos
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                Opis
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Paid" /> @Html.DisplayNameFor(model => model.Paid)
+                    <input class="form-check-input" asp-for="Paid" /> Realizovana transakcija
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="TransactionDate" class="control-label"></label>
+                Datum transakcije
                 <input asp-for="TransactionDate" class="form-control" />
                 <span asp-validation-for="TransactionDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PaidDate" class="control-label"></label>
+                Datum plaćanja
                 <input asp-for="PaidDate" class="form-control" />
                 <span asp-validation-for="PaidDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MemberId" class="control-label"></label>
-                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="BalanceId" class="control-label"></label>
-                <select asp-for="BalanceId" class ="form-control" asp-items="ViewBag.BalanceId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Dodaj" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Povratak na listu</a>
 </div>
 
 @section Scripts {

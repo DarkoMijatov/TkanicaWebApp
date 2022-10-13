@@ -1,79 +1,78 @@
 ﻿@model IEnumerable<TkanicaWebApp.Models.Transaction>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista transakcija";
 }
 
-<h1>Index</h1>
+<h1>Lista transakcija</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionNumber)
+                Broj transakcije
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionType)
+                Vrsta transakcije
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Debtor)
+                Račun
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Creditor)
+                Uplatilac
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReferenceNumber)
+                Primalac
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                Poziv na broj
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Iznos
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Paid)
+                Opis
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionDate)
+                Realizovano
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PaidDate)
+                Datum transakcije
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Balance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
+                Datum plaćanja
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            string paid = item.Paid ? "da" : "ne";
+            string debtor = item.MemberId.HasValue ?
+                item.Member.FullName : item.DebtorId.HasValue ?
+                item.Debtor.Name : @"KUD ""Pargar""";
+            string creditor = item.EmployeeId.HasValue ?
+                item.Employee.FullName : item.CreditorId.HasValue ?
+            item.Creditor.Name : @"KUD ""Pargar""";
+
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TransactionNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TransactionType.Id)
+                @Html.DisplayFor(modelItem => item.TransactionType.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Debtor.Id)
+                @Html.DisplayFor(modelItem => item.Balance.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Creditor.Id)
+                @Html.DisplayFor(modelItem => debtor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => creditor)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReferenceNumber)
@@ -85,7 +84,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Paid)
+                @Html.DisplayFor(modelItem => paid)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TransactionDate)
@@ -94,24 +93,9 @@
                 @Html.DisplayFor(modelItem => item.PaidDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Member.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
             </td>
         </tr>
 }
