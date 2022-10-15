@@ -23,7 +23,8 @@ namespace TkanicaWebApp.Controllers
                 .Include("Client.CreditorTransactions")
                 .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
-                .Include("Balance.Transactions");
+                .Include("Balance.Transactions")
+                .Include("Balance.Transactions.TransactionType");
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -41,6 +42,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
+                .Include("Balance.Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber == null)
             {
@@ -138,6 +140,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
+                .Include("Balance.Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber == null)
             {
@@ -162,6 +165,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("Client.DebtorTransactions")
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
+                .Include("Balance.Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accountNumber != null)
             {

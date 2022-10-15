@@ -40,7 +40,7 @@
                 Grupa
             </th>
             <th>
-                Iznos članarine
+                Dugovanje
             </th>
             <th>
                 Broj proba
@@ -52,6 +52,7 @@
 @foreach (var item in Model) {
             string active = item.Active ? "da" : "ne";
             int rehearsalCount = item.RehearsalMembers.Count;
+            decimal debtAmount = item.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount);
             <tr>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
@@ -81,7 +82,7 @@
                 @Html.DisplayFor(modelItem => item.MembershipFee.MemberGroup.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MembershipFee.Amount)
+                @Html.DisplayFor(modelItem => debtAmount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => rehearsalCount)

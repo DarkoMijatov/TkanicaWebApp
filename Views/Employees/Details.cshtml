@@ -125,6 +125,19 @@
                 }
             </ul>
         </dd>
+        <dt class="col-sm-2">
+            Transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transaction.TransactionNumber)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
     </dl>
 </div>
 <div>

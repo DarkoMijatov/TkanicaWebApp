@@ -9,7 +9,8 @@ namespace TkanicaWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<TkanicaWebAppContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("TkanicaWebAppContext") ?? throw new InvalidOperationException("Connection string 'TkanicaWebAppContext' not found.")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TkanicaWebAppContext") ?? throw new InvalidOperationException("Connection string 'TkanicaWebAppContext' not found."),
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

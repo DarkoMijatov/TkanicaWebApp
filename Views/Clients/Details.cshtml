@@ -8,7 +8,6 @@
     var creditorTransactions = Model.CreditorTransactions.ToList();
     int debtorTransactionsCount = Model.DebtorTransactions.Count;
     var debtorTransactions = Model.DebtorTransactions.ToList();
-    var transactions = creditorTransactions.Concat(debtorTransactions).OrderBy(x => x.Id).ToList();
     string isCompany = Model.IsCompany ? "da" : "ne";
 }
 
@@ -121,11 +120,25 @@
             @Html.DisplayFor(model => debtorTransactionsCount)
         </dd>
         <dt class="col-sm-2">
-            Transakcije
+            Odlazne transakcije:
         </dt>
         <dd class="col-sm-10">
             <ul>
-                @foreach (var transaction in transactions)
+                @foreach (var transaction in debtorTransactions)
+                {
+                    string transactionText = $"{transaction.TransactionNumber} ({transaction.TransactionDate})";
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Dolazne transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var transaction in creditorTransactions)
                 {
                     string transactionText = $"{transaction.TransactionNumber} ({transaction.TransactionDate})";
                     <li>

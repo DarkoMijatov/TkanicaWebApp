@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TkanicaWebApp.Models.AccountNumber>
 
 @{
-    ViewData["Title"] = "Lista brojeva računa";
+    ViewData["Title"] = "Brojevi računa";
 }
 
 <h1>Lista brojeva računa</h1>
@@ -22,7 +22,13 @@
                 Vlasnik
             </th>
             <th>
-                Broj transakcija
+                Broj odlaznih transakcija
+            </th>
+            <th>
+                Broj dolaznih transakcija
+            </th>
+            <th>
+                Stanje
             </th>
             <th></th>
         </tr>
@@ -32,9 +38,12 @@
     string owner = item.ClientId != null ?
         item.Client.Name : item.BalanceId != null ?
         item.Balance.Name : "Nema vlasnika";
-    int transactionsCount = item.ClientId != null ?
-        item.Client.CreditorTransactions.Count + item.Client.DebtorTransactions.Count : item.BalanceId != null ?
-        item.Balance.Transactions.Count : 0;
+    int incomingTransactionsCount = item.ClientId != null ?
+        item.Client.CreditorTransactions.Count : item.BalanceId != null ?
+        item.Balance.Transactions.Count(x => x.TransactionType.Direction == 1) : 0;
+    int outgoingTransactionsCount = item.ClientId != null ?
+        item.Client.DebtorTransactions.Count : item.BalanceId != null ?
+        item.Balance.Transactions.Count(x => x.TransactionType.Direction == -1) : 0;
             <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.BankAccountNumber)
@@ -46,7 +55,10 @@
                 @Html.DisplayFor(modelItem => owner)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => transactionsCount)
+                @Html.DisplayFor(modelItem => incomingTransactionsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => outgoingTransactionsCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |

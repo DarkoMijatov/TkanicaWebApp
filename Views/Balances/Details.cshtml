@@ -4,7 +4,7 @@
     ViewData["Title"] = "Podaci o računu";
     int transactionsCount = Model.Transactions.Count;
     string isCash = Model.IsCash ? "da" : "ne";
-    decimal balanceAmount = Model.Transactions.Sum(x => x.Amount * x.TransactionType.Direction);
+    decimal balanceAmount = Model.Transactions.Where(x => x.Paid).Sum(x => x.Amount * x.TransactionType.Direction);
 }
 
 <h1>Podaci o računu</h1>
@@ -43,16 +43,30 @@
             @Html.DisplayFor(model => balanceAmount)
         </dd>
         <dt class = "col-sm-2">
-            Datum kreiranja
+           Dolazne transakcije:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
+            <ul>
+                @foreach(var transaction in Model.Transactions.Where(x => x.TransactionType.Direction == 1))
+                {
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transaction.TransactionNumber)</a>
+                    </li>
+                }
+            </ul>
         </dd>
         <dt class = "col-sm-2">
-            Datum izmene
+           Odlazne transakcije:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
+            <ul>
+                @foreach(var transaction in Model.Transactions.Where(x => x.TransactionType.Direction == -1))
+                {
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transaction.TransactionNumber)</a>
+                    </li>
+                }
+            </ul>
         </dd>
     </dl>
 </div>
