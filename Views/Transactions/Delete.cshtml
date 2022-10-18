@@ -1,111 +1,105 @@
 ﻿@model TkanicaWebApp.Models.Transaction
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Brisanje transakcije";
+    string paid = Model.Paid ? "da" : "ne";
+    string debtor = Model.MemberId.HasValue ?
+        Model.Member.FullName : Model.DebtorId.HasValue ?
+        Model.Debtor.Name : @"KUD ""Pargar""";
+    string debtorController = Model.MemberId.HasValue ?
+        "Members" : Model.DebtorId.HasValue ?
+        "Clients" : "Balances";
+    int debtorId = Model.MemberId.HasValue ?
+        Model.MemberId!.Value : Model.DebtorId.HasValue ?
+        Model.DebtorId!.Value : Model.BalanceId;
+    string creditor = Model.EmployeeId.HasValue ?
+        Model.Employee.FullName : Model.CreditorId.HasValue ?
+    Model.Creditor.Name : @"KUD ""Pargar""";
+    string creditorController = Model.EmployeeId.HasValue ?
+        "Employees" : Model.CreditorId.HasValue ?
+        "Clients" : "Balances";
+    int creditorId = Model.EmployeeId.HasValue ?
+        Model.EmployeeId!.Value : Model.CreditorId.HasValue ?
+        Model.CreditorId!.Value : Model.BalanceId;
 }
 
-<h1>Delete</h1>
+<h1>Brisanje transakcije</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Da li ste sigurni da želite da obrišete transakciju?</h3>
 <div>
-    <h4>Transaction</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionNumber)
+        <dt class="col-sm-2">
+            Broj transakcije
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TransactionNumber)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionType)
+        <dt class="col-sm-2">
+            Vrsta transakcije
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TransactionType.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TransactionType.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Debtor)
+        <dt class="col-sm-2">
+            Račun
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Debtor.Id)
+        <dd class="col-sm-10">
+            <a asp-controller="Balances" asp-action="Details" asp-route-id="@Model.Balance.Id">@Html.DisplayFor(model => model.Balance.Name)</a>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Creditor)
+        <dt class="col-sm-2">
+            Uplatilac
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Creditor.Id)
+        <dd class="col-sm-10">
+            <a asp-controller="@debtorController" asp-action="Details" asp-route-id="@debtorId">@Html.DisplayFor(model => debtor)</a>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReferenceNumber)
+        <dt class="col-sm-2">
+            Primalac
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            <a asp-controller="@creditorController" asp-action="Details" asp-route-id="@creditorId">@Html.DisplayFor(model => creditor)</a>
+        </dd>
+        <dt class="col-sm-2">
+            Poziv na broj
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ReferenceNumber)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Amount)
+        <dt class="col-sm-2">
+            Iznos
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Amount)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            Opis
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Paid)
+        <dt class="col-sm-2">
+            Realizovano
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Paid)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => paid)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionDate)
+        <dt class="col-sm-2">
+            Datum transakcije
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TransactionDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaidDate)
+        <dt class="col-sm-2">
+            Datum plaćanja
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PaidDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Member)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Member.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Balance.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Brisanje" class="btn btn-danger" /> |
+        <a asp-action="Index">Povratak na listu</a>
     </form>
 </div>

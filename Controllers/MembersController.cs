@@ -40,6 +40,7 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")
                 .Include(x => x.Transactions)
+                .Include("Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
