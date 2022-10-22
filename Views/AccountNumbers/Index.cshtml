@@ -1,0 +1,71 @@
+﻿@model IEnumerable<TkanicaWebApp.Models.AccountNumber>
+
+@{
+    ViewData["Title"] = "Brojevi računa";
+}
+
+<h1>Lista brojeva računa</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Broj računa
+            </th>
+            <th>
+                Banka
+            </th>
+            <th>
+                Vlasnik
+            </th>
+            <th>
+                Broj odlaznih transakcija
+            </th>
+            <th>
+                Broj dolaznih transakcija
+            </th>
+            <th>
+                Stanje
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    string owner = item.ClientId != null ?
+        item.Client.Name : item.BalanceId != null ?
+        item.Balance.Name : "Nema vlasnika";
+    int incomingTransactionsCount = item.ClientId != null ?
+        item.Client.CreditorTransactions.Count : item.BalanceId != null ?
+        item.Balance.Transactions.Count(x => x.TransactionType.Direction == 1) : 0;
+    int outgoingTransactionsCount = item.ClientId != null ?
+        item.Client.DebtorTransactions.Count : item.BalanceId != null ?
+        item.Balance.Transactions.Count(x => x.TransactionType.Direction == -1) : 0;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankAccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => owner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => incomingTransactionsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => outgoingTransactionsCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

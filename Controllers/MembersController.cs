@@ -21,7 +21,8 @@ namespace TkanicaWebApp.Controllers
             var tkanicaWebAppContext = _context.Member
                 .Include(m => m.MembershipFee)
                 .Include(x => x.MembershipFee.MemberGroup)
-                .Include(x => x.RehearsalMembers);
+                .Include(x => x.RehearsalMembers)
+                .Include(x => x.Transactions);
             return View(await tkanicaWebAppContext.ToListAsync());
         }
 
@@ -38,6 +39,8 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.MembershipFee.MemberGroup)
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")
+                .Include(x => x.Transactions)
+                .Include("Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
@@ -79,7 +82,13 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Member.FindAsync(id);
+            var member = await _context.Member
+                .Include(m => m.MembershipFee)
+                .Include(x => x.MembershipFee.MemberGroup)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalMembers.Rehearsal")
+                .Include(x => x.Transactions)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
                 return NotFound();
@@ -136,6 +145,7 @@ namespace TkanicaWebApp.Controllers
                 .Include(m => m.MembershipFee)
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")
+                .Include(x => x.Transactions)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {

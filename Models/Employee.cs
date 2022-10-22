@@ -32,13 +32,14 @@ namespace TkanicaWebApp.Models
         public decimal? OtherExpenses { get; set; }
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(50)")]
-        public string? OtherExpensesDescription { get; set; }
+        public string OtherExpensesDescription { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         public List<EmployeeMemberGroup> EmployeeMemberGroups { get; set; }
         public List<RehearsalEmployee> RehearsalEmployees { get; set; }
+        public List<Transaction> Transactions { get; set; }
         [NotMapped]
         public string FullName { get => $"{FirstName} {LastName}"; }
     }

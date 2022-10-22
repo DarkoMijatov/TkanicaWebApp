@@ -1,0 +1,53 @@
+﻿@model TkanicaWebApp.Models.Balance
+
+@{
+    ViewData["Title"] = "Brisanje računa";
+    string isCash = Model.IsCash ? "da" : "ne";
+    int transactionsCount = Model.Transactions.Count;
+    decimal balanceAmount = Model.Transactions.Where(x => x.Paid).Sum(x => x.Amount * x.TransactionType.Direction);
+}
+
+<h1>Brisanje računa</h1>
+
+<h3>Da li ste sigurni da želite da obrišete račun?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Naziv
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Broj računa
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AccountNumber.BankAccountNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            Keš
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => isCash)
+        </dd>
+        <dt class="col-sm-2">
+            Broj transackcija
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => transactionsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Trenutno stanje
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => balanceAmount)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Brisanje" class="btn btn-danger" /> |
+        <a asp-action="Index">Povratak na listu</a>
+    </form>
+</div>

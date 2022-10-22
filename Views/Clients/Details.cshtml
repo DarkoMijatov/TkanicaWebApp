@@ -1,0 +1,155 @@
+﻿@model TkanicaWebApp.Models.Client
+
+@{
+    ViewData["Title"] = "Podaci o klijentu";
+    int accountNumbersCount = Model.AccountNumbers.Count;
+    var accountNumbers = Model.AccountNumbers.ToList();
+    int creditorTransactionsCount = Model.CreditorTransactions.Count;
+    var creditorTransactions = Model.CreditorTransactions.ToList();
+    int debtorTransactionsCount = Model.DebtorTransactions.Count;
+    var debtorTransactions = Model.DebtorTransactions.ToList();
+    string isCompany = Model.IsCompany ? "da" : "ne";
+}
+
+<h1>Podaci o klijentu</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Naziv
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Pravno lice
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => isCompany)
+        </dd>
+        <dt class="col-sm-2">
+            Adresa
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-2">
+            Grad
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt class="col-sm-2">
+            Telefon
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            E-mail
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            Web sajt
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Website)
+        </dd>
+        <dt class="col-sm-2">
+            Matični broj
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Poreski broj
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TaxNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Logo
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Logo)
+        </dd>
+        <dt class="col-sm-2">
+            Datum kreiranja
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Datum poslednje izmene
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Broj računa
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => accountNumbersCount)
+        </dd>
+        <dt class="col-sm-2">
+            Brojevi računa
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var accountNumber in accountNumbers)
+                {
+                    <li>
+                        <a asp-controller="AccountNumbers" asp-action="Details" asp-route-id="@accountNumber.Id">@Html.DisplayFor(model => accountNumber.BankAccountNumber)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Broj dolaznih transakcija
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => creditorTransactionsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Broj odlaznih transakcija
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => debtorTransactionsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Odlazne transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var transaction in debtorTransactions)
+                {
+                    string transactionText = $"{transaction.TransactionNumber} ({transaction.TransactionDate})";
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Dolazne transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var transaction in creditorTransactions)
+                {
+                    string transactionText = $"{transaction.TransactionNumber} ({transaction.TransactionDate})";
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
+</div>

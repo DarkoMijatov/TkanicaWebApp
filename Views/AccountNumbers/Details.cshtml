@@ -1,0 +1,94 @@
+﻿@model TkanicaWebApp.Models.AccountNumber
+
+@{
+    ViewData["Title"] = "Podaci o broju računa";
+    string owner = Model.ClientId != null ?
+        Model.Client.Name : Model.BalanceId != null ?
+        Model.Balance.Name : "Nema vlasnika";
+    int incomingTransactionsCount = Model.ClientId != null ?
+        Model.Client.CreditorTransactions.Count : Model.BalanceId != null ?
+        Model.Balance.Transactions.Count(x => x.TransactionType.Direction == 1) : 0;
+    int outgoingTransactionsCount = Model.ClientId != null ?
+        Model.Client.DebtorTransactions.Count : Model.BalanceId != null ?
+        Model.Balance.Transactions.Count(x => x.TransactionType.Direction == -1) : 0;
+    string ownerController = Model.ClientId != null ?
+        "Clients" : Model.BalanceId != null ?
+        "Balances" : "AccountNumbers";
+    int ownerId = Model.ClientId != null ?
+        Model.ClientId.Value : Model.BalanceId != null ?
+        Model.BalanceId.Value : Model.Id;
+    var incomingTransactions = Model.ClientId.HasValue ?
+        Model.Client.CreditorTransactions.ToList() :
+        Model.Balance.Transactions.Where(x => x.TransactionType.Direction == 1).ToList();
+    var outgoingTransactions = Model.ClientId.HasValue ?
+        Model.Client.DebtorTransactions.ToList() :
+        Model.Balance.Transactions.Where(x => x.TransactionType.Direction == -1).ToList();
+}
+
+<h1>Podaci o broju računa</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Broj računa
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BankAccountNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            Banka
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Bank)
+        </dd>
+        <dt class = "col-sm-2">
+            Vlasnik
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-controller="@ownerController" asp-action="Details" asp-route-id="@ownerId">@Html.DisplayFor(model => owner)</a>
+        </dd>
+        <dt class = "col-sm-2">
+            Broj odlaznih transakcija
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => outgoingTransactionsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Broj dolaznih transakcija
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => incomingTransactionsCount)
+        </dd>
+        <dt class="col-sm-2">
+            Odlazne transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach(var transaction in outgoingTransactions)
+                {
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transaction.TransactionNumber)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Dolazne transakcije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach(var transaction in incomingTransactions)
+                {
+                    <li>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transaction.TransactionNumber)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
+</div>

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using TkanicaWebApp.BackgroundJobs;
 using TkanicaWebApp.Data;
 namespace TkanicaWebApp
 {
@@ -9,10 +11,25 @@ namespace TkanicaWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<TkanicaWebAppContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("TkanicaWebAppContext") ?? throw new InvalidOperationException("Connection string 'TkanicaWebAppContext' not found.")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TkanicaWebAppContext") ?? throw new InvalidOperationException("Connection string 'TkanicaWebAppContext' not found."),
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(MembershipFeeBackgroundJob));
+
+                configure.AddJob<MembershipFeeBackgroundJob>(jobKey)
+                    .AddTrigger(trigger =>
+                        trigger.ForJob(jobKey)
+                            .WithCronSchedule("0 0 0 20-28 * ?"));
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            builder.Services.AddQuartzHostedService();
 
             var app = builder.Build();
 
