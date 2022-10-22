@@ -14,7 +14,7 @@
         Model.DebtorId!.Value : Model.BalanceId;
     string creditor = Model.EmployeeId.HasValue ?
         Model.Employee.FullName : Model.CreditorId.HasValue ?
-    Model.Creditor.Name : @"KUD ""Pargar""";
+        Model.Creditor.Name : @"KUD ""Pargar""";
     string creditorController = Model.EmployeeId.HasValue ?
         "Employees" : Model.CreditorId.HasValue ?
         "Clients" : "Balances";

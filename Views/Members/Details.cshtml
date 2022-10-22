@@ -154,7 +154,7 @@
             <ul>
                 @foreach (var transaction in transactions)
                 {
-                    var transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")";
+                    var transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 ? $" ({transaction.Description})" : "");
                     <li>
                         <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
                     </li>

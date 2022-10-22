@@ -4,7 +4,7 @@
     ViewData["Title"] = "Brisanje računa";
     string isCash = Model.IsCash ? "da" : "ne";
     int transactionsCount = Model.Transactions.Count;
-    decimal balanceAmount = Model.Transactions.Sum(x => x.Amount * x.TransactionType.Direction);
+    decimal balanceAmount = Model.Transactions.Where(x => x.Paid).Sum(x => x.Amount * x.TransactionType.Direction);
 }
 
 <h1>Brisanje računa</h1>
@@ -42,17 +42,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => balanceAmount)
-        <dt class = "col-sm-2">
-            Datum kreiranja
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            Datum izmene
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
     </dl>
     

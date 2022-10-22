@@ -49,8 +49,12 @@
             <ul>
                 @foreach(var transaction in Model.Transactions.Where(x => x.TransactionType.Direction == 1))
                 {
+                    string debtor = transaction.MemberId.HasValue ?
+                        transaction.Member.FullName : transaction.DebtorId.HasValue ?
+                        transaction.Debtor.Name : @"KUD ""Pargar""";
+                    string transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 ? $" ({transaction.Description})" : "") + $" ({debtor})";
                     <li>
-                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transaction.TransactionNumber)</a>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transactionText)</a>
                     </li>
                 }
             </ul>
@@ -62,6 +66,10 @@
             <ul>
                 @foreach(var transaction in Model.Transactions.Where(x => x.TransactionType.Direction == -1))
                 {
+                    string creditor = transaction.EmployeeId.HasValue ?
+                        transaction.Employee.FullName : transaction.CreditorId.HasValue ?
+                        transaction.Creditor.Name : @"KUD ""Pargar""";
+                    string transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 ? $" ({transaction.Description})" : "") + $" ({creditor})";
                     <li>
                         <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transaction.TransactionNumber)</a>
                     </li>

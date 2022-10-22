@@ -27,12 +27,6 @@
             <th>
                 Stanje
             </th>
-            <th>
-                Datum kreiranja
-            </th>
-            <th>
-                Datum izmene
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -40,7 +34,7 @@
 @foreach (var item in Model) {
     string isCash = item.IsCash ? "da" : "ne";
     int transactionsCount = item.Transactions.Count;
-    decimal balanceAmount = item.Transactions.Sum(x => x.Amount * x.TransactionType.Direction);
+    decimal balanceAmount = item.Transactions.Where(x => x.Paid).Sum(x => x.Amount * x.TransactionType.Direction);
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -56,12 +50,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => balanceAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |

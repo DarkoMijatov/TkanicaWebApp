@@ -41,6 +41,10 @@ namespace TkanicaWebApp.Controllers
                 .Include(b => b.AccountNumber)
                 .Include(b => b.Transactions)
                 .Include("Transactions.TransactionType")
+                .Include("Transactions.Member")
+                .Include("Transactions.Employee")
+                .Include("Transactions.Debtor")
+                .Include("Transactions.Creditor")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (balance == null)
             {
