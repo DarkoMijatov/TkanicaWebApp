@@ -51,6 +51,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("RehearsalEmployees.Rehearsal.RehearsalMembers.Member.MembershipFee")
                 .Include("RehearsalEmployees.Rehearsal.RehearsalMembers.Member.MembershipFee.MemberGroup")
                 .Include(x => x.Transactions)
+                .Include("Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -73,7 +74,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Title,DateOfBirth,StartDate,EndDate,EarningTypeId,EarningAmount,PayPeriodId,OtherExpenses,OtherExpensesDescription,CreatedAt,UpdatedAt")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Title,DateOfBirth,StartDate,EndDate,Active,EarningTypeId,EarningAmount,PayPeriodId,OtherExpenses,OtherExpensesDescription,CreatedAt,UpdatedAt")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +110,7 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Title,DateOfBirth,StartDate,EndDate,EarningTypeId,EarningAmount,PayPeriodId,OtherExpenses,OtherExpensesDescription,CreatedAt,UpdatedAt")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Title,DateOfBirth,StartDate,EndDate,Active,EarningTypeId,EarningAmount,PayPeriodId,OtherExpenses,OtherExpensesDescription,CreatedAt,UpdatedAt")] Employee employee)
         {
             if (id != employee.Id)
             {

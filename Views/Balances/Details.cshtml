@@ -69,9 +69,9 @@
                     string creditor = transaction.EmployeeId.HasValue ?
                         transaction.Employee.FullName : transaction.CreditorId.HasValue ?
                         transaction.Creditor.Name : @"KUD ""Pargar""";
-                    string transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 ? $" ({transaction.Description})" : "") + $" ({creditor})";
+                    string transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 || transaction.TransactionTypeId == 2 ? $" ({transaction.Description})" : "") + $" ({creditor})";
                     <li>
-                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transaction.TransactionNumber)</a>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(x => transactionText)</a>
                     </li>
                 }
             </ul>

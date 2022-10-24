@@ -108,6 +108,22 @@ namespace TkanicaWebApp.Controllers
                     transaction.DebtorId = null;
                     transaction.CreditorId = null;
                     transaction.MemberId = null;
+                    var month = transaction.TransactionDate.Month switch
+                    {
+                        1 => "januar",
+                        2 => "februar",
+                        3 => "mart",
+                        4 => "april",
+                        5 => "maj",
+                        6 => "jun",
+                        7 => "jul",
+                        8 => "avgust",
+                        9 => "septembar",
+                        10 => "oktobar",
+                        11 => "novembar",
+                        _ => "decembar"
+                    };
+                    transaction.Description = $"{month} {transaction.TransactionDate.Year}.";
                 }
                 else if (transaction.TransactionTypeId == 3 && transaction.BalanceId == 1)
                 {

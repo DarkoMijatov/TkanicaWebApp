@@ -24,6 +24,7 @@ namespace TkanicaWebApp.Models
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
+        public bool Active { get; set; }
         public int EarningTypeId { get; set; }
         public EarningType EarningType { get; set; }
         public decimal EarningAmount { get; set; }

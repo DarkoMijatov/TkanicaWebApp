@@ -6,6 +6,7 @@
     var payPeriod = Model.PayPeriod.Name;
     int rehearsalsCount = Model.RehearsalEmployees.Count;
     List<Rehearsal> rehearsals = Model.RehearsalEmployees.Select(x => x.Rehearsal).ToList();
+    string isActive = Model.Active ? "da" : "ne";
 }
 
 <h1>Podaci o zaposlenom</h1>
@@ -50,6 +51,12 @@
             @Html.DisplayFor(model => model.EndDate)
         </dd>
         <dt class = "col-sm-2">
+            Aktivan
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => isActive)
+        </dd>
+        <dt class = "col-sm-2">
             Vrsta zarade
         </dt>
         <dd class = "col-sm-10">
@@ -78,12 +85,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.OtherExpensesDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            Datum kreiranja
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
         </dd>
         <dt class = "col-sm-2">
             Datum izmene
@@ -132,8 +133,9 @@
             <ul>
                 @foreach (var transaction in Model.Transactions)
                 {
+                    string transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : "") + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 2 ? $" ({transaction.Description})" : "");
                     <li>
-                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transaction.TransactionNumber)</a>
+                        <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
                     </li>
                 }
             </ul>
