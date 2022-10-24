@@ -41,6 +41,11 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Active" /> Aktivan
+                </label>
+            </div>
             <div class="form-group">
                 Vrsta zarade
                 <select asp-for="EarningTypeId" class="form-control" asp-items="ViewBag.EarningTypeId"></select>

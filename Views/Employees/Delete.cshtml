@@ -4,6 +4,7 @@
     ViewData["Title"] = "Brisanje zaposlenog";
     var earningType = Model.EarningType.Name;
     var payPeriod = Model.PayPeriod.Name;
+    string isActive = Model.Active ? "da" : "ne";
 }
 
 <h1>Brisanje zaposlenog</h1>
@@ -47,6 +48,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class = "col-sm-2">
+            Aktivan
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => isActive)
         </dd>
         <dt class = "col-sm-2">
             Vrsta zarade

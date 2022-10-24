@@ -31,6 +31,9 @@
                 Kraj zaposlenja
             </th>
             <th>
+                Aktivan
+            </th>
+            <th>
                 Vrsta zarade
             </th>
             <th>
@@ -60,6 +63,7 @@
             string earningType = item.EarningType.Name;
             string payPeriod = item.PayPeriod.Name;
             int rehearsalsCount = item.RehearsalEmployees.Count;
+            string isActive = item.Active ? "da" : "ne";
             <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -78,6 +82,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => isActive)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => earningType)

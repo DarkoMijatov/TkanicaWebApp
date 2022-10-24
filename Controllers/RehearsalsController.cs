@@ -57,7 +57,7 @@ namespace TkanicaWebApp.Controllers
         public IActionResult Create()
         {
 
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(x => x.Active), "Id", "FullName");
             ViewData["MemberId"] = new SelectList(_context.Member.Where(x => x.Active), "Id", "FullName");
             return View();
         }
@@ -123,7 +123,7 @@ namespace TkanicaWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId));
+            ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(x => x.Active), "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId));
             ViewData["MemberId"] = new SelectList(_context.Member.Where(x => x.Active), "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId));
             return View(rehearsalViewModel);
         }

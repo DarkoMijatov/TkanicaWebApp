@@ -29,6 +29,18 @@ namespace TkanicaWebApp
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
+            builder.Services.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(EarningBackgroundJob));
+
+                configure.AddJob<EarningBackgroundJob>(jobKey)
+                    .AddTrigger(trigger =>
+                        trigger.ForJob(jobKey)
+                            .WithCronSchedule("0 0 0 1 * ?"));
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
             builder.Services.AddQuartzHostedService();
 
             var app = builder.Build();
