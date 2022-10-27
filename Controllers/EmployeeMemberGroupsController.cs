@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -20,13 +21,30 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: EmployeeMemberGroups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, PageViewModel<EmployeeMemberGroup> viewModel)
         {
             var tkanicaWebAppContext = _context.EmployeeMemberGroup
                 .Include(e => e.Employee)
                 .Include(e => e.MemberGroup)
                 .OrderBy(e => e.MemberGroupId);
-            return View(await tkanicaWebAppContext.ToListAsync());
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = sort == viewModel.CurrentSort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "employeeAsc" => await tkanicaWebAppContext.OrderBy(x => x.Employee.FirstName + " " + x.Employee.LastName).ToListAsync(),
+                    "employeeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Employee.FirstName + " " + x.Employee.LastName).ToListAsync(),
+                    "memberGroupAsc" => await tkanicaWebAppContext.OrderBy(x => x.MemberGroup.Name).ToListAsync(),
+                    "memberGroupDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.MemberGroup.Name).ToListAsync(),
+                    "createdAtAsc" => await tkanicaWebAppContext.OrderBy(x => x.CreatedAt).ToListAsync(),
+                    "createdAtDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.CreatedAt).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            return View(viewModel);
         }
 
         // GET: EmployeeMemberGroups/Details/5

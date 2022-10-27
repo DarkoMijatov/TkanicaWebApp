@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Member>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Member>
 
 @{
     ViewData["Title"] = "Članovi";
@@ -13,43 +13,43 @@
     <thead>
         <tr>
             <th>
-                Id
+                <a asp-action="Index" asp-route-sort="idAsc" asp-route-currentSort="@Model.CurrentSort">Id</a>
             </th>
             <th>
-                Ime
+                <a asp-action="Index" asp-route-sort="firstNameAsc" asp-route-currentSort="@Model.CurrentSort">Ime</a>
             </th>
             <th>
-                Prezime
+                <a asp-action="Index" asp-route-sort="lastNameAsc" asp-route-currentSort="@Model.CurrentSort">Prezime</a>
             </th>
             <th>
-                Datum rođenja
+                <a asp-action="Index" asp-route-sort="dateOfBirthAsc" asp-route-currentSort="@Model.CurrentSort">Datum rođenja</a>
             </th>
             <th>
-                Datum upisa
+                <a asp-action="Index" asp-route-sort="dateOfEntryAsc" asp-route-currentSort="@Model.CurrentSort">Datum upisa</a>
             </th>
             <th>
-                Aktivan
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort">Aktivan</a>
             </th>
             <th>
-                Telefon
+                <a asp-action="Index" asp-route-sort="phoneAsc" asp-route-currentSort="@Model.CurrentSort">Telefon</a>
             </th>
             <th>
-                Email
+                <a asp-action="Index" asp-route-sort="emailAsc" asp-route-currentSort="@Model.CurrentSort">Email</a>
             </th>
             <th>
-                Grupa
+                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort">Grupa</a>
             </th>
             <th>
-                Dugovanje
+                <a asp-action="Index" asp-route-sort="debtAmountAsc" asp-route-currentSort="@Model.CurrentSort">Dugovanje</a>
             </th>
             <th>
-                Broj proba
+                <a asp-action="Index" asp-route-sort="rehearsalsAsc" asp-route-currentSort="@Model.CurrentSort">Broj proba</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             string active = item.Active ? "da" : "ne";
             int rehearsalCount = item.RehearsalMembers.Count;
             decimal debtAmount = item.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount);

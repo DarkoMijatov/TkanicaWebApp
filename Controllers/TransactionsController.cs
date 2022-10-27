@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -20,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, PageViewModel<Transaction> viewModel)
         {
             var tkanicaWebAppContext = _context.Transaction
                 .Include(t => t.Balance)
@@ -29,7 +30,39 @@ namespace TkanicaWebApp.Controllers
                 .Include(t => t.Employee)
                 .Include(t => t.Member)
                 .Include(t => t.TransactionType);
-            return View(await tkanicaWebAppContext.ToListAsync());
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = viewModel.CurrentSort == sort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "transactionNumberAsc" => await tkanicaWebAppContext.OrderBy(x => x.TransactionNumber).ToListAsync(),
+                    "transactionNumberDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.TransactionNumber).ToListAsync(),
+                    "transactionTypeAsc" => await tkanicaWebAppContext.OrderBy(x => x.TransactionType.Name).ToListAsync(),
+                    "transactionTypeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.TransactionType.Name).ToListAsync(),
+                    "balanceAsc" => await tkanicaWebAppContext.OrderBy(x => x.Balance.Name).ToListAsync(),
+                    "balanceDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Balance.Name).ToListAsync(),
+                    "debtorAsc" => await tkanicaWebAppContext.OrderBy(x => x.DebtorId != null ? x.Debtor.Name : x.MemberId != null ? x.Member.FirstName + " " + x.Member.LastName : @"KUD ""Pargar""").ToListAsync(),
+                    "debtorDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.DebtorId != null ? x.Debtor.Name : x.MemberId != null ? x.Member.FirstName + " " + x.Member.LastName : @"KUD ""Pargar""").ToListAsync(),
+                    "creditorAsc" => await tkanicaWebAppContext.OrderBy(x => x.CreditorId != null ? x.Creditor.Name : x.EmployeeId != null ? x.Employee.FirstName + " " + x.Employee.LastName : @"KUD ""Pargar""").ToListAsync(),
+                    "creditorDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.CreditorId != null ? x.Creditor.Name : x.EmployeeId != null ? x.Employee.FirstName + " " + x.Employee.LastName : @"KUD ""Pargar""").ToListAsync(),
+                    "referenceNumberAsc" => await tkanicaWebAppContext.OrderBy(x => x.ReferenceNumber).ToListAsync(),
+                    "referenceNumberDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.ReferenceNumber).ToListAsync(),
+                    "amountAsc" => await tkanicaWebAppContext.OrderBy(x => x.Amount).ToListAsync(),
+                    "amountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Amount).ToListAsync(),
+                    "descriptionAsc" => await tkanicaWebAppContext.OrderBy(x => x.Description).ToListAsync(),
+                    "descriptionDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Description).ToListAsync(),
+                    "isPaidAsc" => await tkanicaWebAppContext.OrderBy(x => x.Paid).ToListAsync(),
+                    "isPaidDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Paid).ToListAsync(),
+                    "transactionDateAsc" => await tkanicaWebAppContext.OrderBy(x => x.TransactionDate).ToListAsync(),
+                    "transactionDateDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.TransactionDate).ToListAsync(),
+                    "paidDateAsc" => await tkanicaWebAppContext.OrderBy(x => x.PaidDate).ToListAsync(),
+                    "paidDateDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.PaidDate).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderByDescending(x => x.TransactionDate).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderByDescending(x => x.TransactionDate).ToListAsync();
+            return View(viewModel);
         }
 
         // GET: Transactions/Details/5
@@ -108,22 +141,7 @@ namespace TkanicaWebApp.Controllers
                     transaction.DebtorId = null;
                     transaction.CreditorId = null;
                     transaction.MemberId = null;
-                    var month = transaction.TransactionDate.Month switch
-                    {
-                        1 => "januar",
-                        2 => "februar",
-                        3 => "mart",
-                        4 => "april",
-                        5 => "maj",
-                        6 => "jun",
-                        7 => "jul",
-                        8 => "avgust",
-                        9 => "septembar",
-                        10 => "oktobar",
-                        11 => "novembar",
-                        _ => "decembar"
-                    };
-                    transaction.Description = $"{month} {transaction.TransactionDate.Year}.";
+                    transaction.Description = $"{transaction.TransactionDate.Month}.{transaction.TransactionDate.Year}.";
                 }
                 else if (transaction.TransactionTypeId == 3 && transaction.BalanceId == 1)
                 {

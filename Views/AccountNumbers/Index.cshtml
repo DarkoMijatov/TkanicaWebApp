@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.AccountNumber>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<AccountNumber>
 
 @{
     ViewData["Title"] = "Brojevi računa";
@@ -13,28 +13,25 @@
     <thead>
         <tr>
             <th>
-                Broj računa
+                <a asp-action="Index" asp-route-sort="accountNumberAsc" asp-route-currentSort="@Model.CurrentSort">Broj računa</a>
             </th>
             <th>
-                Banka
+                <a asp-action="Index" asp-route-sort="bankAsc" asp-route-currentSort="@Model.CurrentSort">Banka</a>
             </th>
             <th>
-                Vlasnik
+                <a asp-action="Index" asp-route-sort="ownerAsc" asp-route-currentSort="@Model.CurrentSort">Vlasnik</a>
             </th>
             <th>
-                Broj odlaznih transakcija
+                <a asp-action="Index" asp-route-sort="incomingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj dolaznih transakcija</a>
             </th>
             <th>
-                Broj dolaznih transakcija
-            </th>
-            <th>
-                Stanje
+                <a asp-action="Index" asp-route-sort="outgoingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj odlaznih transakcija</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
     string owner = item.ClientId != null ?
         item.Client.Name : item.BalanceId != null ?
         item.Balance.Name : "Nema vlasnika";

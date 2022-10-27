@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -20,15 +21,53 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, PageViewModel<Employee> viewModel)
         {
-              return View(await _context.Employee
+            var tkanicaWebAppContext = _context.Employee
                   .Include(x => x.EmployeeMemberGroups)
                   .Include(x => x.EarningType)
                   .Include(x => x.PayPeriod)
                   .Include(x => x.RehearsalEmployees)
-                  .Include("RehearsalEmployees.Rehearsal")
-                  .ToListAsync());
+                  .Include("RehearsalEmployees.Rehearsal");
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = sort == viewModel.CurrentSort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "firstNameAsc" => await tkanicaWebAppContext.OrderBy(x => x.FirstName).ToListAsync(),
+                    "firstNameDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.FirstName).ToListAsync(),
+                    "lastNameAsc" => await tkanicaWebAppContext.OrderBy(x => x.LastName).ToListAsync(),
+                    "lastNameDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.LastName).ToListAsync(),
+                    "titleAsc" => await tkanicaWebAppContext.OrderBy(x => x.Title).ToListAsync(),
+                    "titleDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Title).ToListAsync(),
+                    "dateOfBirthAsc" => await tkanicaWebAppContext.OrderBy(x => x.DateOfBirth).ToListAsync(),
+                    "dateOfBirthDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.DateOfBirth).ToListAsync(),
+                    "startDateAsc" => await tkanicaWebAppContext.OrderBy(x => x.StartDate).ToListAsync(),
+                    "startDateDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.StartDate).ToListAsync(),
+                    "endDateAsc" => await tkanicaWebAppContext.OrderBy(x => x.EndDate).ToListAsync(),
+                    "endDateDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EndDate).ToListAsync(),
+                    "activeAsc" => await tkanicaWebAppContext.OrderBy(x => x.Active).ToListAsync(),
+                    "activeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Active).ToListAsync(),
+                    "earningTypeAsc" => await tkanicaWebAppContext.OrderBy(x => x.EarningType.Name).ToListAsync(),
+                    "earningTypeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EarningType.Name).ToListAsync(),
+                    "earningAmountAsc" => await tkanicaWebAppContext.OrderBy(x => x.EarningAmount).ToListAsync(),
+                    "earningAmountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EarningAmount).ToListAsync(),
+                    "payPeriodAsc" => await tkanicaWebAppContext.OrderBy(x => x.PayPeriod).ToListAsync(),
+                    "payPeriodDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.PayPeriod).ToListAsync(),
+                    "otherExpensesAsc" => await tkanicaWebAppContext.OrderBy(x => x.OtherExpenses).ToListAsync(),
+                    "otherExpensesDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.OtherExpenses).ToListAsync(),
+                    "otherExpensesDescriptionAsc" => await tkanicaWebAppContext.OrderBy(x => x.OtherExpensesDescription).ToListAsync(),
+                    "otherExpensesDescriptionDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.OtherExpensesDescription).ToListAsync(),
+                    "employeeMemberGroupsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.EmployeeMemberGroups.Count).ToListAsync(),
+                    "employeeMemberGroupsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EmployeeMemberGroups.Count).ToListAsync(),
+                    "rehearsalsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalEmployees.Count).ToListAsync(),
+                    "rehearsalsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalEmployees.Count).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+            return View(viewModel);
         }
 
         // GET: Employees/Details/5

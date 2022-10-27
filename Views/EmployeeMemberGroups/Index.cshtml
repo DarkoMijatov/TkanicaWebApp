@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.EmployeeMemberGroup>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<EmployeeMemberGroup>
 
 @{
     ViewData["Title"] = "Lista angažovanja";
@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                Zaposleni
+                <a asp-action="Index" asp-route-sort="employeeAsc" asp-route-currentSort="@Model.CurrentSort">Zaposleni</a>
             </th>
             <th>
-                Grupa članova
+                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort">Grupa članova</a>
             </th>
             <th>
-                Datum kreiranja
+                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort">Datum kreiranja</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             string employeeName = $"{item.Employee.FirstName} {item.Employee.LastName}";
             string groupName = item.MemberGroup.Name;
             <tr>

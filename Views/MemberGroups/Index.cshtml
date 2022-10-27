@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.MemberGroup>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<MemberGroup>
 
 @{
     ViewData["Title"] = "Grupe članova";
@@ -13,34 +13,31 @@
     <thead>
         <tr>
             <th>
-                Naziv
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort">Naziv</a>
             </th>
             <th>
-                Aktivna
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort">Aktivna</a>
             </th>
             <th>
-                Datum kreiranja
+                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort">Datum kreiranja</a>
             </th>
             <th>
-                Datum izmene
+                <a asp-action="Index" asp-route-sort="activeMembersCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj aktivnih članova</a>
             </th>
             <th>
-                Broj aktivnih igrača
+                <a asp-action="Index" asp-route-sort="membersCountAsc" asp-route-currentSort="@Model.CurrentSort">Ukupan broj članova</a>
             </th>
             <th>
-                Ukupan broj igrača
+                <a asp-action="Index" asp-route-sort="employeesCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj zaposlenih</a>
             </th>
             <th>
-                Broj zaposlenih
-            </th>
-            <th>
-                Broj proba
+                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj proba</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             string active = item.Active ? "da" : "ne";
             int activeCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count(x => x.Active);
             int totalCount = item.MembershipFees.SelectMany(x => x.Members).DistinctBy(x => x.Id).Count();
@@ -55,9 +52,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => activeCount)

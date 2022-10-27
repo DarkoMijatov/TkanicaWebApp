@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Transaction>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Transaction>
 
 @{
     ViewData["Title"] = "Transakcije";
@@ -13,43 +13,43 @@
     <thead>
         <tr>
             <th>
-                Broj transakcije
+                <a asp-action="Index" asp-route-sort="transactionNumberAsc" asp-route-currentSort="@Model.CurrentSort">Broj transakcije</a>
             </th>
             <th>
-                Vrsta transakcije
+                <a asp-action="Index" asp-route-sort="transactionTypeAsc" asp-route-currentSort="@Model.CurrentSort">Vrsta transakcije</a>
             </th>
             <th>
-                Račun
+                <a asp-action="Index" asp-route-sort="balanceAsc" asp-route-currentSort="@Model.CurrentSort">Račun</a>
             </th>
             <th>
-                Uplatilac
+                <a asp-action="Index" asp-route-sort="debtorAsc" asp-route-currentSort="@Model.CurrentSort">Uplatilac</a>
             </th>
             <th>
-                Primalac
+                <a asp-action="Index" asp-route-sort="creditorAsc" asp-route-currentSort="@Model.CurrentSort">Primalac</a>
             </th>
             <th>
-                Poziv na broj
+                <a asp-action="Index" asp-route-sort="referenceNumberAsc" asp-route-currentSort="@Model.CurrentSort">Poziv na broj</a>
             </th>
             <th>
-                Iznos
+                <a asp-action="Index" asp-route-sort="amountAsc" asp-route-currentSort="@Model.CurrentSort">Iznos</a>
             </th>
             <th>
-                Opis
+                <a asp-action="Index" asp-route-sort="descriptionAsc" asp-route-currentSort="@Model.CurrentSort">Opis</a>
             </th>
             <th>
-                Realizovano
+                <a asp-action="Index" asp-route-sort="isPaidAsc" asp-route-currentSort="@Model.CurrentSort">Realizovano</a>
             </th>
             <th>
-                Datum transakcije
+                <a asp-action="Index" asp-route-sort="transactionDateAsc" asp-route-currentSort="@Model.CurrentSort">Datum transakcije</a>
             </th>
             <th>
-                Datum plaćanja
+                <a asp-action="Index" asp-route-sort="paidDateAsc" asp-route-currentSort="@Model.CurrentSort">Datum plaćanja</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             string paid = item.Paid ? "da" : "ne";
             string debtor = item.MemberId.HasValue ?
                 item.Member.FullName : item.DebtorId.HasValue ?

@@ -36,7 +36,7 @@ namespace TkanicaWebApp
                 configure.AddJob<EarningBackgroundJob>(jobKey)
                     .AddTrigger(trigger =>
                         trigger.ForJob(jobKey)
-                            .WithCronSchedule("0 0 0 1 * ?"));
+                            .WithCronSchedule("0 0 * * * ?"));
 
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });

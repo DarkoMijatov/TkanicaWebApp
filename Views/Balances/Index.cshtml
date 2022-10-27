@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Balance>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Balance>
 
 @{
     ViewData["Title"] = "Lista računa";
@@ -13,25 +13,25 @@
     <thead>
         <tr>
             <th>
-                Naziv
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort">Naziv</a>
             </th>
             <th>
-                Broj računa
+                <a asp-action="Index" asp-route-sort="accountNumberAsc" asp-route-currentSort="@Model.CurrentSort">Broj računa</a>
             </th>
             <th>
-                Keš
+                <a asp-action ="Index" asp-route-sort="isCashAsc" asp-route-currentSort="@Model.CurrentSort">Keš</a>
             </th>
             <th>
-                Broj transakcija
+                <a asp-action="Index" asp-route-sort="transactionsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj transakcija</a>
             </th>
             <th>
-                Stanje
+                <a asp-action="Index" asp-route-sort="balanceAmountAsc" asp-route-currentSort="@Model.CurrentSort">Stanje</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
     string isCash = item.IsCash ? "da" : "ne";
     int transactionsCount = item.Transactions.Count;
     decimal balanceAmount = item.Transactions.Where(x => x.Paid).Sum(x => x.Amount * x.TransactionType.Direction);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.MembershipFee>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<MembershipFee>
 
 @{
     ViewData["Title"] = "Lista članarina";
@@ -13,31 +13,25 @@
     <thead>
         <tr>
             <th>
-                Naziv
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort">Naziv</a>
             </th>
             <th>
-                Grupa
+                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort">Grupa</a>
             </th>
             <th>
-                Iznos
+                <a asp-action="Index" asp-route-sort="amountAsc" asp-route-currentSort="@Model.CurrentSort">Iznos</a>
             </th>
             <th>
-                Datum kreiranja
+                <a asp-action="Index" asp-route-sort="activeMembersCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj aktivnih članova</a>
             </th>
             <th>
-                Datum izmene
-            </th>
-            <th>
-                Broj aktivnih članova
-            </th>
-            <th>
-                Ukupan broj članova
+                <a asp-action="Index" asp-route-sort="membersCountAsc" asp-route-currentSort="@Model.CurrentSort">Ukupan broj članova</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             int activeCount = item.Members.Count(x => x.Active);
             int totalCount = item.Members.Count;
             <tr>
@@ -49,12 +43,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => activeCount)
