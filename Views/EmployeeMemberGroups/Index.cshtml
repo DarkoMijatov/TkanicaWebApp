@@ -9,17 +9,28 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sort="employeeAsc" asp-route-currentSort="@Model.CurrentSort">Zaposleni</a>
+                <a asp-action="Index" asp-route-sort="employeeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Zaposleni</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort">Grupa članova</a>
+                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Grupa članova</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort">Datum kreiranja</a>
+                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Datum kreiranja</a>
             </th>
             <th></th>
         </tr>

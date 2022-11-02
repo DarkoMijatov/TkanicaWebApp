@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: EmployeeMemberGroups
-        public async Task<IActionResult> Index(string sort, PageViewModel<EmployeeMemberGroup> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<EmployeeMemberGroup> viewModel)
         {
             var tkanicaWebAppContext = _context.EmployeeMemberGroup
                 .Include(e => e.Employee)
@@ -43,6 +43,16 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Employee.FirstName.ToLower().Contains(viewModel.Search) ||
+                        x.Employee.LastName.ToLower().Contains(viewModel.Search) ||
+                        x.MemberGroup.Name.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
 
             return View(viewModel);
         }

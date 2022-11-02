@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index(string sort, PageViewModel<Client> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Client> viewModel)
         {
             var tkanicaWebAppContext = _context.Client
               .Include(x => x.AccountNumbers)
@@ -61,6 +61,22 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Name.ToLower().Contains(viewModel.Search) ||
+                        x.Address.ToLower().Contains(viewModel.Search) ||
+                        x.City.ToLower().Contains(viewModel.Search) ||
+                        x.PhoneNumber.ToLower().Contains(viewModel.Search) ||
+                        x.Email.ToLower().Contains(viewModel.Search) ||
+                        x.IdNumber.ToLower().Contains(viewModel.Search) ||
+                        x.TaxNumber.ToLower().Contains(viewModel.Search) ||
+                        x.Website.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
+
             return View(viewModel);
         }
 

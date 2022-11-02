@@ -9,23 +9,34 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+     <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+     </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort">Naziv</a>
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Naziv</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="accountNumberAsc" asp-route-currentSort="@Model.CurrentSort">Broj računa</a>
+                <a asp-action="Index" asp-route-sort="accountNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj računa</a>
             </th>
             <th>
-                <a asp-action ="Index" asp-route-sort="isCashAsc" asp-route-currentSort="@Model.CurrentSort">Keš</a>
+                <a asp-action="Index" asp-route-sort="isCashAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Keš</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="transactionsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj transakcija</a>
+                <a asp-action="Index" asp-route-sort="transactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj transakcija</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="balanceAmountAsc" asp-route-currentSort="@Model.CurrentSort">Stanje</a>
+                <a asp-action="Index" asp-route-sort="balanceAmountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Stanje</a>
             </th>
             <th></th>
         </tr>

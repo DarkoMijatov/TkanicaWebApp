@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: MemberGroups
-        public async Task<IActionResult> Index(string sort, PageViewModel<MemberGroup> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<MemberGroup> viewModel)
         {
             var tkanicaWebAppContext = _context.MemberGroup
                 .Include(m => m.MembershipFees)
@@ -53,6 +53,14 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Name.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
 
             return View(viewModel);
         }

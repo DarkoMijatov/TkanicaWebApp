@@ -9,50 +9,61 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sort="firstNameAsc" asp-route-currentSort="@Model.CurrentSort">Ime</a>
+                <a asp-action="Index" asp-route-sort="firstNameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Ime</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="lastNameAsc" asp-route-currentSort="@Model.CurrentSort">Prezime</a>
+                <a asp-action="Index" asp-route-sort="lastNameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Prezime</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="titleAsc" asp-route-currentSort="@Model.CurrentSort">Pozicija</a>
+                <a asp-action="Index" asp-route-sort="titleAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Pozicija</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="dateOfBirthAsc" asp-route-currentSort="@Model.CurrentSort">Datum rođenja</a>
+                <a asp-action="Index" asp-route-sort="dateOfBirthAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Datum rođenja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="startDateAsc" asp-route-currentSort="@Model.CurrentSort">Početak zaposlenja</a>
+                <a asp-action="Index" asp-route-sort="startDateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Početak zaposlenja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="endDateAsc" asp-route-currentSort="@Model.CurrentSort">Kraj zaposlenja</a>
+                <a asp-action="Index" asp-route-sort="endDateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Kraj zaposlenja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort">Aktivan</a>
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Aktivan</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="earningTypeAsc" asp-route-currentSort="@Model.CurrentSort">Vrsta zarade</a>
+                <a asp-action="Index" asp-route-sort="earningTypeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Vrsta zarade</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="earningAmountAsc" asp-route-currentSort="@Model.CurrentSort">Iznos zarade</a>
+                <a asp-action="Index" asp-route-sort="earningAmountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Iznos zarade</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="payPeriodAsc" asp-route-currentSort="@Model.CurrentSort">Period plaćanja</a>
+                <a asp-action="Index" asp-route-sort="payPeriodAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Period plaćanja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="otherExpensesAsc" asp-route-currentSort="@Model.CurrentSort">Ostali troškovi</a>
+                <a asp-action="Index" asp-route-sort="otherExpensesAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Ostali troškovi</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="otherExpensesDescriptionAsc" asp-route-currentSort="@Model.CurrentSort">Opis ostalih troškova</a>
+                <a asp-action="Index" asp-route-sort="otherExpensesDescriptionAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Opis ostalih troškova</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="employeeMemberGroupsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj angažovanja</a>
+                <a asp-action="Index" asp-route-sort="employeeMemberGroupsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj angažovanja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj proba</a>
+                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj proba</a>
             </th>
             <th></th>
         </tr>

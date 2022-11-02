@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index(string sort, PageViewModel<Transaction> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Transaction> viewModel)
         {
             var tkanicaWebAppContext = _context.Transaction
                 .Include(t => t.Balance)
@@ -62,6 +62,25 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderByDescending(x => x.TransactionDate).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.TransactionDate.ToString().Contains(viewModel.Search) ||
+                        (x.Paid && x.PaidDate.ToString().Contains(viewModel.Search)) ||
+                        (x.CreditorId != null && x.Creditor.Name.ToLower().Contains(viewModel.Search)) ||
+                        (x.DebtorId != null && x.Debtor.Name.ToLower().Contains(viewModel.Search)) ||
+                        x.Balance.Name.ToLower().Contains(viewModel.Search) ||
+                        (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(viewModel.Search)) ||
+                        (!string.IsNullOrEmpty(x.TransactionNumber) && x.Description.ToLower().Contains(viewModel.Search)) ||
+                        x.TransactionType.Name.ToLower().Contains(viewModel.Search) ||
+                        x.Amount.ToString().Contains(viewModel.Search) ||
+                        (x.MemberId != null && (x.Member.FirstName.ToLower().Contains(viewModel.Search) || x.Member.LastName.ToLower().Contains(viewModel.Search))) ||
+                        (x.EmployeeId != null && (x.Employee.FirstName.ToLower().Contains(viewModel.Search) || x.Employee.LastName.ToLower().Contains(viewModel.Search))))
+                    .ToList();
+            }
+
             return View(viewModel);
         }
 

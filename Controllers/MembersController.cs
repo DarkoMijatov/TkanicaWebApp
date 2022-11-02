@@ -16,7 +16,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index(string sort, PageViewModel<Member> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Member> viewModel)
         {
             var tkanicaWebAppContext = _context.Member
                 .Include(m => m.MembershipFee)
@@ -55,6 +55,24 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.FirstName.ToLower().Contains(viewModel.Search) ||
+                        x.LastName.ToLower().Contains(viewModel.Search) ||
+                        x.MembershipFee.MemberGroup.Name.ToLower().Contains(viewModel.Search) ||
+                        (!string.IsNullOrEmpty(x.Phone) && x.Phone.ToLower().Contains(viewModel.Search)) ||
+                        (!string.IsNullOrEmpty(x.Email) && x.Email.ToLower().Contains(viewModel.Search)) ||
+                        (!string.IsNullOrEmpty(x.School) && x.School.ToLower().Contains(viewModel.Search)) ||
+                        (!string.IsNullOrEmpty(x.Class) && x.School.ToLower().Contains(viewModel.Search)) ||
+                        x.DateOfBirth.ToString().Contains(viewModel.Search) ||
+                        x.DateOfEntry.ToString().Contains(viewModel.Search)
+                        )
+                    .ToList();
+            }
+
             return View(viewModel);
         }
 

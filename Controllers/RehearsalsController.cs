@@ -17,7 +17,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Rehearsals
-        public async Task<IActionResult> Index(string sort, PageViewModel<Rehearsal> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Rehearsal> viewModel)
         {
             var tkanicaWebAppContext = _context.Rehearsal
                 .Include(x => x.RehearsalEmployees)
@@ -44,6 +44,16 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Date.ToString().Contains(viewModel.Search) || 
+                        x.RehearsalMembers.Select(x => x.Member.MembershipFee.MemberGroup).First().Name.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
+
             return View(viewModel);
         }
 

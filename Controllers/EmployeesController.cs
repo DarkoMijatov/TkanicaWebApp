@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index(string sort, PageViewModel<Employee> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Employee> viewModel)
         {
             var tkanicaWebAppContext = _context.Employee
                   .Include(x => x.EmployeeMemberGroups)
@@ -67,6 +67,21 @@ namespace TkanicaWebApp.Controllers
             }
             else
                 viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.FirstName.ToLower().Contains(viewModel.Search) ||
+                        x.LastName.ToLower().Contains(viewModel.Search) ||
+                        x.LastName.ToLower().Contains(viewModel.Search) ||
+                        x.Title.ToLower().Contains(viewModel.Search) ||
+                        x.EarningType.Name.ToLower().Contains(viewModel.Search) ||
+                        x.PayPeriod.Name.ToLower().Contains(viewModel.Search) ||
+                        (!string.IsNullOrEmpty(x.OtherExpensesDescription) && x.OtherExpensesDescription.ToLower().Contains(viewModel.Search)))
+                    .ToList();
+            }
+
             return View(viewModel);
         }
 

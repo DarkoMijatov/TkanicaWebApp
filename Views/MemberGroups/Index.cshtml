@@ -9,29 +9,40 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+     <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+     </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort">Naziv</a>
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Naziv</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort">Aktivna</a>
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort"asp-route-search="@Model.Search">Aktivna</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort">Datum kreiranja</a>
+                <a asp-action="Index" asp-route-sort="createdAtAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Datum kreiranja</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="activeMembersCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj aktivnih članova</a>
+                <a asp-action="Index" asp-route-sort="activeMembersCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj aktivnih članova</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="membersCountAsc" asp-route-currentSort="@Model.CurrentSort">Ukupan broj članova</a>
+                <a asp-action="Index" asp-route-sort="membersCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Ukupan broj članova</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="employeesCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj zaposlenih</a>
+                <a asp-action="Index" asp-route-sort="employeesCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj zaposlenih</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort">Broj proba</a>
+                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj proba</a>
             </th>
             <th></th>
         </tr>
