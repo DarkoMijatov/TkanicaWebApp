@@ -21,13 +21,78 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Client> viewModel)
         {
-              return View(await _context.Client
-                .Include(x => x.AccountNumbers)
-                .Include(x => x.CreditorTransactions)
-                .Include(x => x.DebtorTransactions)
-                .ToListAsync());
+            var tkanicaWebAppContext = _context.Client
+              .Include(x => x.AccountNumbers)
+              .Include(x => x.CreditorTransactions)
+              .Include(x => x.DebtorTransactions);
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = viewModel.CurrentSort == sort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "nameAsc" => await tkanicaWebAppContext.OrderBy(x => x.Name).ToListAsync(),
+                    "nameDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Name).ToListAsync(),
+                    "isCompanyAsc" => await tkanicaWebAppContext.OrderBy(x => x.IsCompany).ToListAsync(),
+                    "isCompanyDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.IsCompany).ToListAsync(),
+                    "addressAsc" => await tkanicaWebAppContext.OrderBy(x => x.Address).ToListAsync(),
+                    "addressDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Address).ToListAsync(),
+                    "cityAsc" => await tkanicaWebAppContext.OrderBy(x => x.City).ToListAsync(),
+                    "cityDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.City).ToListAsync(),
+                    "phoneAsc" => await tkanicaWebAppContext.OrderBy(x => x.PhoneNumber).ToListAsync(),
+                    "phoneDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.PhoneNumber).ToListAsync(),
+                    "emailAsc" => await tkanicaWebAppContext.OrderBy(x => x.Email).ToListAsync(),
+                    "emailDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Email).ToListAsync(),
+                    "websiteAsc" => await tkanicaWebAppContext.OrderBy(x => x.Website).ToListAsync(),
+                    "websiteDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Website).ToListAsync(),
+                    "idNumberAsc" => await tkanicaWebAppContext.OrderBy(x => x.IdNumber).ToListAsync(),
+                    "idNumberDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.IdNumber).ToListAsync(),
+                    "taxNumberAsc" => await tkanicaWebAppContext.OrderBy(x => x.TaxNumber).ToListAsync(),
+                    "taxNumberDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.TaxNumber).ToListAsync(),
+                    "accountNumbersCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.AccountNumbers.Count).ToListAsync(),
+                    "accountNumbersCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.AccountNumbers.Count).ToListAsync(),
+                    "incomingTransactionsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.CreditorTransactions.Count).ToListAsync(),
+                    "incomingTransactionsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.CreditorTransactions.Count).ToListAsync(),
+                    "outgoingTransactionsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.DebtorTransactions.Count).ToListAsync(),
+                    "outgoingTransactionsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.DebtorTransactions.Count).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Name.ToLower().Contains(viewModel.Search) ||
+                        x.Address.ToLower().Contains(viewModel.Search) ||
+                        x.City.ToLower().Contains(viewModel.Search) ||
+                        x.PhoneNumber.ToLower().Contains(viewModel.Search) ||
+                        x.Email.ToLower().Contains(viewModel.Search) ||
+                        x.IdNumber.ToLower().Contains(viewModel.Search) ||
+                        x.TaxNumber.ToLower().Contains(viewModel.Search) ||
+                        x.Website.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
+
+            return View(viewModel);
         }
 
         // GET: Clients/Details/5

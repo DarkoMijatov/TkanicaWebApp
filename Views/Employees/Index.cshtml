@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Employee>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Employee>
 
 @{
     ViewData["Title"] = "Lista zaposlenih";
@@ -9,56 +9,67 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Ime
+                <a asp-action="Index" asp-route-sort="firstNameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Ime</a>
             </th>
             <th>
-                Prezime
+                <a asp-action="Index" asp-route-sort="lastNameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Prezime</a>
             </th>
             <th>
-                Pozicija
+                <a asp-action="Index" asp-route-sort="titleAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Pozicija</a>
             </th>
             <th>
-                Datum rođenja
+                <a asp-action="Index" asp-route-sort="dateOfBirthAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Datum rođenja</a>
             </th>
             <th>
-                Početak zaposlenja
+                <a asp-action="Index" asp-route-sort="startDateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Početak zaposlenja</a>
             </th>
             <th>
-                Kraj zaposlenja
+                <a asp-action="Index" asp-route-sort="endDateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Kraj zaposlenja</a>
             </th>
             <th>
-                Aktivan
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Aktivan</a>
             </th>
             <th>
-                Vrsta zarade
+                <a asp-action="Index" asp-route-sort="earningTypeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Vrsta zarade</a>
             </th>
             <th>
-                Iznos zarade
+                <a asp-action="Index" asp-route-sort="earningAmountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Iznos zarade</a>
             </th>
             <th>
-                Period plaćanja
+                <a asp-action="Index" asp-route-sort="payPeriodAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Period plaćanja</a>
             </th>
             <th>
-                Dodatni troškovi
+                <a asp-action="Index" asp-route-sort="otherExpensesAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Ostali troškovi</a>
             </th>
             <th>
-                Opis dodatnih troškova
+                <a asp-action="Index" asp-route-sort="otherExpensesDescriptionAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Opis ostalih troškova</a>
             </th>
             <th>
-                Broj grupa članova
+                <a asp-action="Index" asp-route-sort="employeeMemberGroupsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj angažovanja</a>
             </th>
             <th>
-                Broj proba
+                <a asp-action="Index" asp-route-sort="rehearsalsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj proba</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             int groupsCount = item.EmployeeMemberGroups.Count;
             string earningType = item.EarningType.Name;
             string payPeriod = item.PayPeriod.Name;
@@ -116,3 +127,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>

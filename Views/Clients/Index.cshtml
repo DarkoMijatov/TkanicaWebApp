@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Client>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Client>
 
 @{
     ViewData["Title"] = "Lista klijenata";
@@ -9,50 +9,61 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Naziv
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Naziv</a>
             </th>
             <th>
-                Pravno lice
+                <a asp-action="Index" asp-route-sort="isCompanyAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Pravno lice</a>
             </th>
             <th>
-                Adresa
+                <a asp-action="Index" asp-route-sort="addressAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Adresa</a>
             </th>
             <th>
-                Grad
+                <a asp-action="Index" asp-route-sort="cityAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Grad</a>
             </th>
             <th>
-                Telefon
+                <a asp-action="Index" asp-route-sort="phoneAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Telefon</a>
             </th>
             <th>
-                E-mail
+                <a asp-action="Index" asp-route-sort="emailAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">E-mail</a>
             </th>
             <th>
-                Web sajt
+                <a asp-action="Index" asp-route-sort="websiteAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Web sajt</a>
             </th>
             <th>
-                Matični broj
+                <a asp-action="Index" asp-route-sort="idNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Matični broj</a>
             </th>
             <th>
-                Poreski broj
+                <a asp-action="Index" asp-route-sort="taxNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Poreski broj</a>
             </th>
             <th>
-                Broj računa
+                <a asp-action="Index" asp-route-sort="accountNumbersCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj računa</a>
             </th>
             <th>
-                Broj dolaznih transakcija
+                <a asp-action="Index" asp-route-sort="incomingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj dolaznih transakcija</a>
             </th>
             <th>
-                Broj odlaznih transakcija
+                <a asp-action="Index" asp-route-sort="outgoingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj odlaznih transakcija</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
         int accountNumbersCount = item.AccountNumbers.Count;
         int debtorTransactionsCount = item.DebtorTransactions.Count;
         int creditorTransactionsCount = item.CreditorTransactions.Count;
@@ -103,3 +114,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>

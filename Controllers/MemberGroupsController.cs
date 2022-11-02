@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -20,14 +21,63 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: MemberGroups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<MemberGroup> viewModel)
         {
-            return View(await _context.MemberGroup
+            var tkanicaWebAppContext = _context.MemberGroup
                 .Include(m => m.MembershipFees)
                 .Include("MembershipFees.Members")
                 .Include(x => x.EmployeeMemberGroups)
-                .Include("MembershipFees.Members.RehearsalMembers")
-                .ToListAsync());
+                .Include("MembershipFees.Members.RehearsalMembers");
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = viewModel.CurrentSort == sort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "nameAsc" => await tkanicaWebAppContext.OrderBy(x => x.Name).ToListAsync(),
+                    "nameDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Name).ToListAsync(),
+                    "activeAsc" => await tkanicaWebAppContext.OrderBy(x => x.Active).ToListAsync(),
+                    "activeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Active).ToListAsync(),
+                    "createdAtAsc" => await tkanicaWebAppContext.OrderBy(x => x.CreatedAt).ToListAsync(),
+                    "createdAtDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.CreatedAt).ToListAsync(),
+                    "activeMembersCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.MembershipFees.SelectMany(x => x.Members).Count(x => x.Active)).ToListAsync(),
+                    "activeMembersCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.MembershipFees.SelectMany(x => x.Members).Count(x => x.Active)).ToListAsync(),
+                    "membersCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.MembershipFees.SelectMany(x => x.Members).Count()).ToListAsync(),
+                    "membersCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.MembershipFees.SelectMany(x => x.Members).Count()).ToListAsync(),
+                    "employeesCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.EmployeeMemberGroups.Count).ToListAsync(),
+                    "employeesCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EmployeeMemberGroups.Count).ToListAsync(),
+                    "rehearsalsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.MembershipFees.SelectMany(x => x.Members).SelectMany(x => x.RehearsalMembers).Select(x => x.RehearsalId).Distinct().Count()).ToListAsync(),
+                    "rehearsalsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.MembershipFees.SelectMany(x => x.Members).SelectMany(x => x.RehearsalMembers).Select(x => x.RehearsalId).Distinct().Count()).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Name.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
+
+            return View(viewModel);
         }
 
         // GET: MemberGroups/Details/5

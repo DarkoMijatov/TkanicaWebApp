@@ -19,23 +19,8 @@ namespace TkanicaWebApp.BackgroundJobs
         {
             var lastEarningUpdate = await _context.EarningUpdate.OrderByDescending(x => x.UpdatedAt).FirstOrDefaultAsync();
 
-            if (DateTime.UtcNow.Day == 1 && (lastEarningUpdate is null) || (lastEarningUpdate.Month != DateTime.UtcNow.Month - 1))
+            if (lastEarningUpdate is null || (lastEarningUpdate.Day != DateTime.UtcNow.Day && lastEarningUpdate.Month != DateTime.UtcNow.Month && lastEarningUpdate.Year != DateTime.UtcNow.Year))
             {
-                var month = (DateTime.UtcNow.Month - 1) switch
-                {
-                    1 => "januar",
-                    2 => "februar",
-                    3 => "mart",
-                    4 => "april",
-                    5 => "maj",
-                    6 => "jun",
-                    7 => "jul",
-                    8 => "avgust",
-                    9 => "septembar",
-                    10 => "oktobar",
-                    11 => "novembar",
-                    _ => "decembar"
-                };
 
                 var employees = await _context.Employee
                     .Include(x => x.Transactions)
@@ -48,13 +33,15 @@ namespace TkanicaWebApp.BackgroundJobs
 
                 foreach (var employee in employees)
                 {
-                    if (!employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.Description == $"{month} {DateTime.UtcNow.Year}"))
+                    if(employee.PayPeriodId == 1 && !employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.TransactionDate == DateTime.UtcNow))
                     {
+                        var transactionDate = DateTime.UtcNow.AddDays(-1);
+
                         var amount = employee.EarningTypeId switch
                         {
                             1 => employee.EarningAmount,
-                            2 => employee.RehearsalEmployees.Select(x => x.Rehearsal).Count() * employee.EarningAmount,
-                            _ => employee.RehearsalEmployees.Select(x => x.Rehearsal)
+                            2 => employee.RehearsalEmployees.Select(x => x.Rehearsal).Count(x => x.Date == transactionDate) * employee.EarningAmount,
+                            _ => employee.RehearsalEmployees.Select(x => x.Rehearsal).Where(x => x.Date == transactionDate)
                                 .SelectMany(x => x.RehearsalMembers)
                                 .DistinctBy(x => x.Member)
                                 .Where(x => x.Member.Active)
@@ -68,7 +55,67 @@ namespace TkanicaWebApp.BackgroundJobs
                             TransactionTypeId = 2,
                             EmployeeId = employee.Id,
                             BalanceId = 1,
-                            Description = $"{month} {DateTime.UtcNow.Year}.",
+                            Description = $"{transactionDate.Day}.{transactionDate.Month}.{transactionDate.Year}.",
+                            Amount = amount,
+                            Paid = false,
+                            TransactionDate = DateTime.UtcNow
+                        });
+                    }
+                    else if (employee.PayPeriodId == 2 && DateTime.UtcNow.DayOfWeek == DayOfWeek.Monday && !employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.TransactionDate == DateTime.UtcNow))
+                    {
+                        var startTransactionDate = DateTime.UtcNow.AddDays(-7);
+                        var endTransactionDate = DateTime.UtcNow.AddDays(-1);
+
+                        var amount = employee.EarningTypeId switch
+                        {
+                            1 => employee.EarningAmount,
+                            2 => employee.RehearsalEmployees.Select(x => x.Rehearsal).Count(x => x.Date >= startTransactionDate && x.Date < DateTime.UtcNow) * employee.EarningAmount,
+                            _ => employee.RehearsalEmployees.Select(x => x.Rehearsal).Where(x => x.Date >= startTransactionDate && x.Date < DateTime.UtcNow)
+                                .SelectMany(x => x.RehearsalMembers)
+                                .DistinctBy(x => x.Member)
+                                .Where(x => x.Member.Active)
+                                .Count() * employee.EarningAmount
+                        };
+
+                        amount += employee.OtherExpenses ?? 0m;
+
+                        _context.Transaction.Add(new Models.Transaction
+                        {
+                            TransactionTypeId = 2,
+                            EmployeeId = employee.Id,
+                            BalanceId = 1,
+                            Description = startTransactionDate.Year == endTransactionDate.Year ? 
+                                startTransactionDate.Month == endTransactionDate.Month ?
+                                $"{startTransactionDate.Day} - {endTransactionDate.Day}.{endTransactionDate.Month}.{DateTime.UtcNow.Year}." :
+                                $"{startTransactionDate.Day}.{startTransactionDate.Month} - {endTransactionDate.Day}. {endTransactionDate.Month}.{DateTime.UtcNow.Year}." :
+                                $"{startTransactionDate.Day}.{startTransactionDate.Month}.{startTransactionDate.Year} - {endTransactionDate.Day}.{endTransactionDate.Month}.{endTransactionDate.Year}.",
+                            Amount = amount,
+                            Paid = false,
+                            TransactionDate = DateTime.UtcNow
+                        });
+                    }
+                    else if (employee.PayPeriodId == 3 && DateTime.UtcNow.Day == 1 && !employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.TransactionDate == DateTime.UtcNow))
+                    {
+                        var transactionDate = DateTime.UtcNow.AddDays(-1);
+                        var amount = employee.EarningTypeId switch
+                        {
+                            1 => employee.EarningAmount,
+                            2 => employee.RehearsalEmployees.Select(x => x.Rehearsal).Count(x => x.Date >= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month - 1, 1) && x.Date < DateTime.UtcNow) * employee.EarningAmount,
+                            _ => employee.RehearsalEmployees.Select(x => x.Rehearsal).Where(x => x.Date >= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month - 1, 1) && x.Date < DateTime.UtcNow)
+                                .SelectMany(x => x.RehearsalMembers)
+                                .DistinctBy(x => x.Member)
+                                .Where(x => x.Member.Active)
+                                .Count() * employee.EarningAmount
+                        };
+
+                        amount += employee.OtherExpenses ?? 0m;
+
+                        _context.Transaction.Add(new Models.Transaction
+                        {
+                            TransactionTypeId = 2,
+                            EmployeeId = employee.Id,
+                            BalanceId = 1,
+                            Description = $"{transactionDate.Month}.{DateTime.UtcNow.Year}.",
                             Amount = amount,
                             Paid = false,
                             TransactionDate = DateTime.UtcNow
@@ -78,7 +125,8 @@ namespace TkanicaWebApp.BackgroundJobs
 
                 _context.EarningUpdate.Add(new EarningUpdate
                 {
-                    Month = DateTime.UtcNow.Month - 1,
+                    Day = DateTime.UtcNow.Day,
+                    Month = DateTime.UtcNow.Month,
                     Year = DateTime.UtcNow.Year
                 });
 

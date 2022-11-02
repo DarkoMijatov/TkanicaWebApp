@@ -17,16 +17,59 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Rehearsals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Rehearsal> viewModel)
         {
-              return View(await _context.Rehearsal
-                  .Include(x => x.RehearsalEmployees)
-                  .Include(x => x.RehearsalMembers)
-                  .Include("RehearsalEmployees.Employee")
-                  .Include("RehearsalMembers.Member")
-                  .Include("RehearsalMembers.Member.MembershipFee")
-                  .Include("RehearsalMembers.Member.MembershipFee.MemberGroup")
-                  .ToListAsync());
+            var tkanicaWebAppContext = _context.Rehearsal
+                .Include(x => x.RehearsalEmployees)
+                .Include(x => x.RehearsalMembers)
+                .Include("RehearsalEmployees.Employee")
+                .Include("RehearsalMembers.Member")
+                .Include("RehearsalMembers.Member.MembershipFee")
+                .Include("RehearsalMembers.Member.MembershipFee.MemberGroup");
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = viewModel.CurrentSort == sort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "dateAsc" => await tkanicaWebAppContext.OrderBy(x => x.Date).ToListAsync(),
+                    "dateDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Date).ToListAsync(),
+                    "memberGroupAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Select(x => x.Member.MembershipFee.MemberGroup).First().Name).ToListAsync(),
+                    "memberGroupDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Select(x => x.Member.MembershipFee.MemberGroup).First().Name).ToListAsync(),
+                    "employeesCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalEmployees.Count).ToListAsync(),
+                    "employeesCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalEmployees.Count).ToListAsync(),
+                    "membersCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Count).ToListAsync(),
+                    "membersCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Count).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.Date.ToString().Contains(viewModel.Search) || 
+                        x.RehearsalMembers.Select(x => x.Member.MembershipFee.MemberGroup).First().Name.ToLower().Contains(viewModel.Search))
+                    .ToList();
+            }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
+
+            return View(viewModel);
         }
 
         // GET: Rehearsals/Details/5

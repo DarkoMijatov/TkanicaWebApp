@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TkanicaWebApp.Models.Rehearsal>
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Rehearsal>
 
 @{
     ViewData["Title"] = "Lista proba";
@@ -9,32 +9,37 @@
 <p>
     <a asp-action="Create">Dodaj</a>
 </p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Datum
+                <a asp-action="Index" asp-route-sort="dateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Date</a>
             </th>
             <th>
-                Grupa
+                <a asp-action="Index" asp-route-sort="memberGroupAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Grupa</a>
             </th>
             <th>
-                Broj zaposlenih
+                <a asp-action="Index" asp-route-sort="employeesCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj zaposlenih</a>
             </th>
             <th>
-                Broj članova
-            </th>
-            <th>
-                Datum kreiranja
-            </th>
-            <th>
-                Datum izmene
+                <a asp-action="Index" asp-route-sort="membersCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj članova</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             var memberGroup = item.RehearsalMembers.Select(x => x.Member.MembershipFee.MemberGroup).FirstOrDefault();
             var employeeCount = item.RehearsalEmployees.Count;
             var memberCount = item.RehearsalMembers.Count;
@@ -52,12 +57,6 @@
                 @Html.DisplayFor(modelItem => memberCount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
@@ -66,3 +65,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>

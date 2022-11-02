@@ -5,6 +5,7 @@ namespace TkanicaWebApp.Models
     public class EarningUpdate : ITrackable
     {
         public int Id { get; set; }
+        public int Day { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
         public DateTime CreatedAt { get; set; }

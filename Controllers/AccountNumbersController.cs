@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -16,7 +17,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: AccountNumbers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<AccountNumber> viewModel)
         {
             var tkanicaWebAppContext = _context.AccountNumber
                 .Include(a => a.Client)
@@ -25,7 +26,54 @@ namespace TkanicaWebApp.Controllers
                 .Include(a => a.Balance)
                 .Include("Balance.Transactions")
                 .Include("Balance.Transactions.TransactionType");
-            return View(await tkanicaWebAppContext.ToListAsync());
+            if (!string.IsNullOrEmpty(sort))
+            {
+                viewModel.CurrentSort = sort == viewModel.CurrentSort ? sort.Replace("Asc", "Desc") : sort;
+                viewModel.List = viewModel.CurrentSort switch
+                {
+                    "accountNumberAsc" => await tkanicaWebAppContext.OrderBy(x => x.BankAccountNumber).ToListAsync(),
+                    "accountNumberDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.BankAccountNumber).ToListAsync(),
+                    "bankAsc" => await tkanicaWebAppContext.OrderBy(x => x.Bank).ToListAsync(),
+                    "bankDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Bank).ToListAsync(),
+                    "ownerAsc" => await tkanicaWebAppContext.OrderBy(x => x.ClientId != null ? x.Client.Name : x.BalanceId != null ? x.Balance.Name : "Nema vlasnika").ToListAsync(),
+                    "ownerDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.ClientId != null ? x.Client.Name : x.BalanceId != null ? x.Balance.Name : "Nema vlasnika").ToListAsync(),
+                    "incomingTransactionsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.ClientId != null ? x.Client.CreditorTransactions.Count : x.BalanceId != null ? x.Balance.Transactions.Count(x => x.TransactionType.Direction == 1) : 0).ToListAsync(),
+                    "incomingTransactionsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.ClientId != null ? x.Client.CreditorTransactions.Count : x.BalanceId != null ? x.Balance.Transactions.Count(x => x.TransactionType.Direction == 1) : 0).ToListAsync(),
+                    "outgoingTransactionsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.ClientId != null ? x.Client.DebtorTransactions.Count : x.BalanceId != null ? x.Balance.Transactions.Count(x => x.TransactionType.Direction == -1) : 0).ToListAsync(),
+                    "outgoingTransactionsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.ClientId != null ? x.Client.DebtorTransactions.Count : x.BalanceId != null ? x.Balance.Transactions.Count(x => x.TransactionType.Direction == -1) : 0).ToListAsync(),
+                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                };
+            }
+            else
+                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                viewModel.Search = search.ToLower();
+                viewModel.List = viewModel.List.
+                    Where(x => x.BankAccountNumber.ToLower().Contains(viewModel.Search) ||
+                        x.Bank.ToLower().Contains(viewModel.Search) ||
+                        (x.Balance != null && x.Balance.Name.ToLower().Contains(viewModel.Search)) ||
+                        (x.ClientId != null && x.Client.Name.ToLower().Contains(viewModel.Search)))
+                        .ToList();
+            }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
+
+            return View(viewModel);
         }
 
         // GET: AccountNumbers/Details/5
