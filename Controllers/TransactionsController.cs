@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Transaction> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Transaction> viewModel)
         {
             var tkanicaWebAppContext = _context.Transaction
                 .Include(t => t.Balance)
@@ -73,13 +73,28 @@ namespace TkanicaWebApp.Controllers
                         (x.DebtorId != null && x.Debtor.Name.ToLower().Contains(viewModel.Search)) ||
                         x.Balance.Name.ToLower().Contains(viewModel.Search) ||
                         (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(viewModel.Search)) ||
-                        (!string.IsNullOrEmpty(x.TransactionNumber) && x.Description.ToLower().Contains(viewModel.Search)) ||
+                        (!string.IsNullOrEmpty(x.TransactionNumber) && x.TransactionNumber.ToLower().Contains(viewModel.Search)) ||
                         x.TransactionType.Name.ToLower().Contains(viewModel.Search) ||
                         x.Amount.ToString().Contains(viewModel.Search) ||
                         (x.MemberId != null && (x.Member.FirstName.ToLower().Contains(viewModel.Search) || x.Member.LastName.ToLower().Contains(viewModel.Search))) ||
                         (x.EmployeeId != null && (x.Employee.FirstName.ToLower().Contains(viewModel.Search) || x.Employee.LastName.ToLower().Contains(viewModel.Search))))
                     .ToList();
             }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
 
             return View(viewModel);
         }

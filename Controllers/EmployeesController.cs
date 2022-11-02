@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index(string sort, string search, PageViewModel<Employee> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Employee> viewModel)
         {
             var tkanicaWebAppContext = _context.Employee
                   .Include(x => x.EmployeeMemberGroups)
@@ -81,6 +81,21 @@ namespace TkanicaWebApp.Controllers
                         (!string.IsNullOrEmpty(x.OtherExpensesDescription) && x.OtherExpensesDescription.ToLower().Contains(viewModel.Search)))
                     .ToList();
             }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
 
             return View(viewModel);
         }

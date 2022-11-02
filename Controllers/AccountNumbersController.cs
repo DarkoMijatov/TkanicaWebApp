@@ -17,7 +17,7 @@ namespace TkanicaWebApp.Controllers
         }
 
         // GET: AccountNumbers
-        public async Task<IActionResult> Index(string sort, string search, PageViewModel<AccountNumber> viewModel)
+        public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<AccountNumber> viewModel)
         {
             var tkanicaWebAppContext = _context.AccountNumber
                 .Include(a => a.Client)
@@ -55,8 +55,23 @@ namespace TkanicaWebApp.Controllers
                         x.Bank.ToLower().Contains(viewModel.Search) ||
                         (x.Balance != null && x.Balance.Name.ToLower().Contains(viewModel.Search)) ||
                         (x.ClientId != null && x.Client.Name.ToLower().Contains(viewModel.Search)))
-                    .ToList();
+                        .ToList();
             }
+
+            int pageCount = viewModel.List.Count % 5 == 0 ? viewModel.List.Count / 5 : viewModel.List.Count / 5 + 1;
+            if (pageIndex != null)
+            {
+                viewModel.PageIndex = pageIndex!.Value;
+                viewModel.HasPreviousPage = pageIndex > 1;
+                viewModel.HasNextPage = pageIndex < pageCount;
+            }
+            else
+            {
+                viewModel.PageIndex = 1;
+                viewModel.HasPreviousPage = false;
+                viewModel.HasNextPage = pageCount > 1;
+            }
+            viewModel.List = viewModel.List.Skip((viewModel.PageIndex - 1) * 5).Take(5).ToList();
 
             return View(viewModel);
         }

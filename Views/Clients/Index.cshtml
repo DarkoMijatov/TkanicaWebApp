@@ -24,40 +24,40 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Naziv</a>
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Naziv</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="isCompanyAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Pravno lice</a>
+                <a asp-action="Index" asp-route-sort="isCompanyAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Pravno lice</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="addressAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Adresa</a>
+                <a asp-action="Index" asp-route-sort="addressAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Adresa</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="cityAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Grad</a>
+                <a asp-action="Index" asp-route-sort="cityAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Grad</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="phoneAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Telefon</a>
+                <a asp-action="Index" asp-route-sort="phoneAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Telefon</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="emailAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">E-mail</a>
+                <a asp-action="Index" asp-route-sort="emailAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">E-mail</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="websiteAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Web sajt</a>
+                <a asp-action="Index" asp-route-sort="websiteAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Web sajt</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="idNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Matični broj</a>
+                <a asp-action="Index" asp-route-sort="idNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Matični broj</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="taxNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Poreski broj</a>
+                <a asp-action="Index" asp-route-sort="taxNumberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search"asp-route-pageIndex="@Model.PageIndex">Poreski broj</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="accountNumbersCountAsc" asp-route-currentSort="@Model.CurrentSort"asp-route-search="@Model.Search">Broj računa</a>
+                <a asp-action="Index" asp-route-sort="accountNumbersCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj računa</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="incomingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj dolaznih transakcija</a>
+                <a asp-action="Index" asp-route-sort="incomingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj dolaznih transakcija</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sort="outgoingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search">Broj odlaznih transakcija</a>
+                <a asp-action="Index" asp-route-sort="outgoingTransactionsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj odlaznih transakcija</a>
             </th>
             <th></th>
         </tr>
@@ -114,3 +114,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>
