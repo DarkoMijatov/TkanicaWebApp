@@ -1,0 +1,89 @@
+﻿@using TkanicaWebApp.Classes
+@model TkanicaWebApp.ViewModels.PageViewModel<PresenceTracking>
+
+@{
+    ViewData["Title"] = "Lista redovnosti";
+}
+
+<h1>Lista redovnosti na probama u @DateTime.UtcNow.Year. godini</h1>
+
+<p>
+     <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+     </form>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sort="nameAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Član</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="septemberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Sep (%)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="octoberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Okt (%)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="novemberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Nov (%)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="decemberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Dec (%)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="totalAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Ukupno (%)</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.List) {
+    string fullName = item.Member.FirstName + " " + item.Member.LastName;
+        <tr>
+            <td>
+               <a asp-controller="Members" asp-action="Details" asp-route-id="@item.MemberId">@Html.DisplayFor(modelItem => fullName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeptemberPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OctoberPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NovemberPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DecemberPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPercentage)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.PageIndex - 1)"
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.PageIndex + 1)"
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>

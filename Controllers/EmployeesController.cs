@@ -60,8 +60,8 @@ namespace TkanicaWebApp.Controllers
                     "otherExpensesDescriptionDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.OtherExpensesDescription).ToListAsync(),
                     "employeeMemberGroupsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.EmployeeMemberGroups.Count).ToListAsync(),
                     "employeeMemberGroupsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.EmployeeMemberGroups.Count).ToListAsync(),
-                    "rehearsalsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalEmployees.Count).ToListAsync(),
-                    "rehearsalsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalEmployees.Count).ToListAsync(),
+                    "rehearsalsCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalEmployees.Count(x => x.Rehearsal.Date.Year == DateTime.UtcNow.Year && x.Rehearsal.Date.Month == DateTime.UtcNow.Month)).ToListAsync(),
+                    "rehearsalsCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalEmployees.Count(x => x.Rehearsal.Date.Year == DateTime.UtcNow.Year && x.Rehearsal.Date.Month == DateTime.UtcNow.Month)).ToListAsync(),
                     _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
                 };
             }

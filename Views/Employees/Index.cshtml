@@ -73,7 +73,7 @@
             int groupsCount = item.EmployeeMemberGroups.Count;
             string earningType = item.EarningType.Name;
             string payPeriod = item.PayPeriod.Name;
-            int rehearsalsCount = item.RehearsalEmployees.Count;
+            int rehearsalsCount = item.RehearsalEmployees.Count(x => x.Rehearsal.Date.Year == DateTime.UtcNow.Year && x.Rehearsal.Date.Month == DateTime.UtcNow.Month);
             string isActive = item.Active ? "da" : "ne";
             <tr>
             <td>
