@@ -62,7 +62,7 @@
     <tbody>
 @foreach (var item in Model.List) {
             string active = item.Active ? "da" : "ne";
-            int rehearsalCount = item.RehearsalMembers.Count;
+            int rehearsalCount = item.RehearsalMembers.Count(x => x.Rehearsal.Date.Year == DateTime.UtcNow.Year && x.Rehearsal.Date.Month == DateTime.UtcNow.Month);
             decimal debtAmount = item.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount);
             <tr>
             <td>

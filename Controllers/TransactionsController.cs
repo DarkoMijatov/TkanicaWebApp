@@ -319,6 +319,7 @@ namespace TkanicaWebApp.Controllers
                         transaction.DebtorId = null;
                         transaction.CreditorId = null;
                         transaction.MemberId = null;
+                        transaction.EmployeeId = null;
                     }
                     else if (transaction.TransactionTypeId == 6)
                     {

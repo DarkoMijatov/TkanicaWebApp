@@ -22,6 +22,7 @@ namespace TkanicaWebApp.Controllers
                 .Include(m => m.MembershipFee)
                 .Include(x => x.MembershipFee.MemberGroup)
                 .Include(x => x.RehearsalMembers)
+                .Include("RehearsalMembers.Rehearsal")
                 .Include(x => x.Transactions);
             if (!string.IsNullOrEmpty(sort))
             {
@@ -48,8 +49,8 @@ namespace TkanicaWebApp.Controllers
                     "memberGroupDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.MembershipFee.MemberGroup.Name).ToListAsync(),
                     "debtAmountAsc" => await tkanicaWebAppContext.OrderBy(x => x.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount)).ToListAsync(),
                     "debtAmountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount)).ToListAsync(),
-                    "rehearsalsAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Count).ToListAsync(),
-                    "rehearsalsDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Count).ToListAsync(),
+                    "rehearsalsAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Count(x => x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)).ToListAsync(),
+                    "rehearsalsDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Count(x => x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)).ToListAsync(),
                     _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
                 };
             }
@@ -107,12 +108,44 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.Transactions)
                 .Include("Transactions.TransactionType")
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var rehearsals = await _context.Rehearsal.Where(x => x.Date.Year == DateTime.UtcNow.Year).ToListAsync();
+            var memberRehearsals = await _context.RehearsalMember.CountAsync(x => x.MemberId == member.Id && x.Rehearsal.Date.Year == DateTime.UtcNow.Year);
+            var memberViewModel = new MemberViewModel
+            {
+                Id = member.Id,
+                FirstName = member.FirstName,
+                LastName = member.LastName,
+                DateOfBirth = member.DateOfBirth.ToString("dd.MM.yyyy"),
+                DateOfEntry = member.DateOfEntry.ToString("dd.MM.yyyy"),
+                Active = member.Active ? "da" : "ne",
+                Address = member.Address,
+                City = member.City,
+                School = member.School,
+                Class = member.Class,
+                Phone = member.Phone,
+                Email = member.Email,
+                MemberGroupName = member.MembershipFee.MemberGroup.Name,
+                MembershipFeeAmount = member.MembershipFee.Amount,
+                DebtAmount = member.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount),
+                FacebookProfileUrl = member.FacebookProfileUrl,
+                InstagramProfileUrl = member.InstagramProfileUrl,
+                TikTokProfileUrl = member.TikTokProfileUrl,
+                ProfilePicture = member.ProfilePicture,
+                YearsOfExperience = member.YearsOfExperience,
+                RehearsalsCount = memberRehearsals,
+                Rehearsals = member.RehearsalMembers.Select(x => x.Rehearsal).Where(x => x.Date.Month == DateTime.UtcNow.Month && x.Date.Year == DateTime.UtcNow.Year).ToList(),
+                Transactions = member.Transactions,
+                UpdatedAt = member.UpdatedAt,
+                PresenceTrackingPercentage = $"{Math.Round(memberRehearsals * 100m / rehearsals.Count, 2)} %"
+            };
+            
             if (member == null)
             {
                 return NotFound();
             }
 
-            return View(member);
+            return View(memberViewModel);
         }
 
         // GET: Members/Create

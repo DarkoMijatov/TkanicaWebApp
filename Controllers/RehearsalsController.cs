@@ -39,11 +39,11 @@ namespace TkanicaWebApp.Controllers
                     "employeesCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalEmployees.Count).ToListAsync(),
                     "membersCountAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Count).ToListAsync(),
                     "membersCountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Count).ToListAsync(),
-                    _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
+                    _ => await tkanicaWebAppContext.OrderByDescending(x => x.Date).ToListAsync()
                 };
             }
             else
-                viewModel.List = await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync();
+                viewModel.List = await tkanicaWebAppContext.OrderByDescending(x => x.Date).ToListAsync();
 
             if (!string.IsNullOrEmpty(search))
             {

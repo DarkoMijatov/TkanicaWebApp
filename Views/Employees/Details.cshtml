@@ -4,8 +4,8 @@
     ViewData["Title"] = "Podaci o zaposlenom";
     var earningType = Model.EarningType.Name;
     var payPeriod = Model.PayPeriod.Name;
-    int rehearsalsCount = Model.RehearsalEmployees.Count;
-    List<Rehearsal> rehearsals = Model.RehearsalEmployees.Select(x => x.Rehearsal).ToList();
+    int rehearsalsCount = Model.RehearsalEmployees.Count(x => x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year);
+    List<Rehearsal> rehearsals = Model.RehearsalEmployees.Select(x => x.Rehearsal).Where(x => x.Date.Month == DateTime.UtcNow.Month && x.Date.Year == DateTime.UtcNow.Year).ToList();
     string isActive = Model.Active ? "da" : "ne";
 }
 
@@ -107,7 +107,7 @@
             </ul>
         </dd>
         <dt class="col-sm-2">
-            Broj proba
+            Broj proba ovog meseca
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => rehearsalsCount)
