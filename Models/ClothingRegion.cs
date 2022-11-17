@@ -11,6 +11,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(30)")]
         public string Name { get; set; }
+        public int AreaId { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         [DataType(DataType.DateTime)]

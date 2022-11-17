@@ -12,7 +12,7 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Data.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    [Migration("20221116235744_ClothingMigration")]
+    [Migration("20221117234650_ClothingMigration")]
     partial class ClothingMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,6 +236,9 @@ namespace TkanicaWebApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -248,6 +251,40 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClothingRegion");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AreaId = 1,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(377),
+                            Name = "Banat",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(383)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AreaId = 2,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(385),
+                            Name = "Šumadija",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(386)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AreaId = 5,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(387),
+                            Name = "Vranjsko polje",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(388)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AreaId = 5,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(389),
+                            Name = "Pčinja",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(389)
+                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.ClothingType", b =>
@@ -270,6 +307,190 @@ namespace TkanicaWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClothingType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(760),
+                            Name = "anterija",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(761)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(763),
+                            Name = "cipele",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(764)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(765),
+                            Name = "čakšire",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(765)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(766),
+                            Name = "čarape",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(767)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(768),
+                            Name = "čizme",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(768)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(769),
+                            Name = "dolama",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(770)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(771),
+                            Name = "džuba",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(771)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(772),
+                            Name = "futa",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(773)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(774),
+                            Name = "gaće",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(774)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(775),
+                            Name = "gunj",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(776)
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(777),
+                            Name = "haljina",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(777)
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(778),
+                            Name = "jelek",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(779)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(779),
+                            Name = "kecelja",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(780)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(781),
+                            Name = "košulja",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(781)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(782),
+                            Name = "marama",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(783)
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(784),
+                            Name = "opanci",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(784)
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(785),
+                            Name = "pantalone",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(786)
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(787),
+                            Name = "pargar",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(787)
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(788),
+                            Name = "pojas",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(789)
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(790),
+                            Name = "prsluk",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(790)
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(791),
+                            Name = "suknja",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(792)
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(793),
+                            Name = "šajkača",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(793)
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(794),
+                            Name = "šalvare",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(795)
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(796),
+                            Name = "šubara",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(796)
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(797),
+                            Name = "torba",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(797)
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(798),
+                            Name = "zubun",
+                            UpdatedAt = new DateTime(2022, 11, 17, 23, 46, 49, 533, DateTimeKind.Utc).AddTicks(799)
+                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.EarningType", b =>
