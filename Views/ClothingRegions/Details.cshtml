@@ -1,0 +1,52 @@
+﻿@model TkanicaWebApp.Models.ClothingRegion
+
+@{
+    ViewData["Title"] = "Podaci o oblasti";
+    int clothingsCount = Model.Clothings.Count;
+    string areaName = TkanicaWebApp.Classes.Constants.Areas.GetValueOrDefault(Model.AreaId);
+}
+
+<h1>Podaci o oblasti</h1>
+
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Naziv
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Oblast
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => areaName)
+        </dd>
+        <dt class = "col-sm-2">
+            Broj komada nošnje
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => clothingsCount)
+        </dd>
+        <dt class = "col-sm-2">
+            Komadi nošnje:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var clothing in Model.Clothings)
+                {
+                    string clothingText = $"{clothing.Id} ({clothing.ClothingType.Name}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Gender)}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Age)})";
+                        <li>
+                            <a asp-controller="Clothings" asp-action="Details" asp-route-id="@clothing.Id">@Html.DisplayFor(x => clothingText)</a>
+                        </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
+</div>
