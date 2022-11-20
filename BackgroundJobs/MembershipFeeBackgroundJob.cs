@@ -17,12 +17,10 @@ namespace TkanicaWebApp.BackgroundJobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var lastMembershipFeeDebtUpdate = await _dbContext.MembershipFeeDebtUpdate
-                .OrderByDescending(x => x.UpdatedAt)
-                .FirstOrDefaultAsync();
+            bool jobAlreadyDone = await _dbContext.MembershipFeeDebtUpdate
+                .AnyAsync(x => x.Year == DateTime.UtcNow.Year && x.Month == DateTime.UtcNow.Month);
 
-            if ( DateTime.UtcNow.Day >= 20 && (lastMembershipFeeDebtUpdate is null || 
-                (lastMembershipFeeDebtUpdate.Month != DateTime.UtcNow.Month && lastMembershipFeeDebtUpdate.Year != DateTime.UtcNow.Year)))
+            if (DateTime.UtcNow.Day >= 20 && !jobAlreadyDone)
             {
                 var month = DateTime.UtcNow.Month switch
                 {
