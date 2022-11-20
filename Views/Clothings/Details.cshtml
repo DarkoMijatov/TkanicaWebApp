@@ -1,0 +1,58 @@
+﻿@model TkanicaWebApp.Models.Clothing
+
+@{
+    ViewData["Title"] = "Podaci o komadu nošnje";
+    string gender = TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(Model.Gender);
+    string age = TkanicaWebApp.Classes.Constants.Age.GetValueOrDefault(Model.Age);
+}
+
+<h1>Podaci o komadu nošnje</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Id
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            Vrsta
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ClothingType.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Oblast
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-controller="ClothingRegions" asp-action="Details" asp-route-id="@Model.ClothingRegionId">@Html.DisplayFor(model => model.ClothingRegion.Name)</a>
+        </dd>
+        <dt class = "col-sm-2">
+            Pol
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => gender)
+        </dd>
+        <dt class = "col-sm-2">
+            Uzrast
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => age)
+        </dd>
+        <dt class = "col-sm-2">
+            Veličina
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt class = "col-sm-2">
+            Fotografija
+        </dt>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
+</div>

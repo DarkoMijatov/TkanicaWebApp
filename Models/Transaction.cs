@@ -20,7 +20,6 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(30)")]
         public string ReferenceNumber { get; set; }
-        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(14,2)")]
         public decimal Amount { get; set; }
         [DataType(DataType.Text)]

@@ -1,0 +1,54 @@
+﻿@model TkanicaWebApp.Models.ClothingRegion
+
+@{
+    ViewData["Title"] = "Brisanje oblasti";
+    int clothingsCount = Model.Clothings.Count;
+    string areaName = TkanicaWebApp.Classes.Constants.Areas.GetValueOrDefault(Model.AreaId);
+}
+
+<h1>Brisanje oblasti</h1>
+
+<h3>Da li ste sigurni da želite da obrišete oblast?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Naziv
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Celina
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => areaName)
+        </dd>
+        <dt class = "col-sm-2">
+            Broj komada nošnje
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => clothingsCount)
+        </dd>
+        <dt class = "col-sm-2">
+            Komadi nošnje:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var clothing in Model.Clothings)
+                {
+                    string clothingText = $"{clothing.Id} ({clothing.ClothingType.Name}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Gender)}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Age)})";
+                    <li>
+                        <a asp-controller="Clothings" asp-action="Details" asp-route-id="@clothing.Id">@Html.DisplayFor(x => clothingText)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Brisanje" class="btn btn-danger" /> |
+        <a asp-action="Index">Povratak na listu</a>
+    </form>
+</div>
