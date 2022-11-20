@@ -107,6 +107,7 @@ namespace TkanicaWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AreaId"] = new SelectList(DictionaryValues.GetDictionaryValues(Constants.Areas), "Id", "Name", clothingRegion.AreaId);
             return View(clothingRegion);
         }
 
@@ -162,6 +163,7 @@ namespace TkanicaWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AreaId"] = new SelectList(DictionaryValues.GetDictionaryValues(Constants.Areas), "Id", "Name", clothingRegion.AreaId);
             return View(clothingRegion);
         }
 

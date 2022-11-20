@@ -58,3 +58,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>

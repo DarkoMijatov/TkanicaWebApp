@@ -1,0 +1,58 @@
+﻿@model TkanicaWebApp.Models.Clothing
+
+@{
+    ViewData["Title"] = "Izmena komada nošnje";
+}
+
+<h1>Izmena komada nošnje</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                Vrsta
+                <select asp-for="ClothingTypeId" class="form-control" asp-items="ViewBag.ClothingTypeId"></select>
+                <span asp-validation-for="ClothingTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Oblast
+                <select asp-for="ClothingRegionId" class="form-control" asp-items="ViewBag.ClothingRegionId"></select>
+                <span asp-validation-for="ClothingRegionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Pol
+                <select asp-for="Gender" class="form-control" asp-items="ViewBag.Gender"></select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Uzrast
+                <select asp-for="Age" class="form-control" asp-items="ViewBag.Age"></select>
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Veličina
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Fotografija
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sačuvaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Povratak na listu</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
