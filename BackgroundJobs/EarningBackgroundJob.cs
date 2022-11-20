@@ -17,9 +17,10 @@ namespace TkanicaWebApp.BackgroundJobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var lastEarningUpdate = await _context.EarningUpdate.OrderByDescending(x => x.UpdatedAt).FirstOrDefaultAsync();
+            bool jobAlreadyDone = await _context.EarningUpdate
+                .AnyAsync(x => x.Day == DateTime.UtcNow.Day && x.Month == DateTime.UtcNow.Month && x.Year == DateTime.UtcNow.Year);
 
-            if (lastEarningUpdate is null || (lastEarningUpdate.Day != DateTime.UtcNow.Day && lastEarningUpdate.Month != DateTime.UtcNow.Month && lastEarningUpdate.Year != DateTime.UtcNow.Year))
+            if (!jobAlreadyDone)
             {
 
                 var employees = await _context.Employee
