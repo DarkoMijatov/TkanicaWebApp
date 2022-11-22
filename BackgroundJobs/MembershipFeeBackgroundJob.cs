@@ -45,7 +45,17 @@ namespace TkanicaWebApp.BackgroundJobs
                     .ToListAsync();
                 foreach (var member in members)
                 {
-                    if (!member.Transactions.Any(x => x.TransactionTypeId == 1 && x.Description == $"{month} {DateTime.UtcNow.Year}."))
+                    // update Member to inactive if there are no Rehearsals attended this month
+                    int rehearsalMembersCount = await _dbContext.RehearsalMember
+                        .Include(x => x.Rehearsal)
+                        .Where(x => x.MemberId == member.Id && x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)
+                        .CountAsync();
+                    if (rehearsalMembersCount == 0)
+                    {
+                        member.Active = false;
+                        _dbContext.Update(member);
+                    }
+                    else if (!member.Transactions.Any(x => x.TransactionTypeId == 1 && x.Description == $"{month} {DateTime.UtcNow.Year}."))
                     {
                         _dbContext.Transaction.Add(new Models.Transaction
                         {

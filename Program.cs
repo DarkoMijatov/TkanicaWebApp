@@ -24,7 +24,11 @@ namespace TkanicaWebApp
                 configure.AddJob<MembershipFeeBackgroundJob>(jobKey)
                     .AddTrigger(trigger =>
                         trigger.ForJob(jobKey)
-                            .WithCronSchedule("0 0 0 20-28 * ?"));
+                            .WithSimpleSchedule(
+                                schedule => schedule
+                                    .WithIntervalInHours(24)
+                                    .RepeatForever())
+                                    .StartNow());
 
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
@@ -36,7 +40,11 @@ namespace TkanicaWebApp
                 configure.AddJob<EarningBackgroundJob>(jobKey)
                     .AddTrigger(trigger =>
                         trigger.ForJob(jobKey)
-                            .WithCronSchedule("0 0 * * * ?"));
+                            .WithSimpleSchedule(
+                                schedule => schedule
+                                    .WithIntervalInHours(24)
+                                    .RepeatForever())
+                                    .StartNow());
 
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
