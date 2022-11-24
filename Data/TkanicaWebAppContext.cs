@@ -31,6 +31,8 @@ namespace TkanicaWebApp.Data
         public DbSet<ClothingRegion> ClothingRegion { get; set; }
         public DbSet<ClothingType> ClothingType { get; set; }
         public DbSet<Clothing> Clothing { get; set; }
+        public DbSet<Reservation> Reservation { get; set; }
+        public DbSet<ClothingReservation> ClothingReservation { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

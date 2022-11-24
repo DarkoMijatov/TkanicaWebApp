@@ -1,0 +1,93 @@
+﻿@model TkanicaWebApp.ViewModels.PageViewModel<Reservation>
+
+@{
+    ViewData["Title"] = "Lista rezervacija";
+}
+
+<h1>Lista rezervacija</h1>
+
+<p>
+    <a asp-action="Create">Dodaj</a>
+</p>
+<p>
+    <form asp-action="Index" asp-route-search="@Model.Search">
+        <div class="form-actions no-color">
+            <p>
+                Pretraga
+                <input asp-for="@Model.Search" class="form-control" />
+                <span asp-validation-for="@Model.Search" class="text-danger"></span>
+            </p>
+        </div>
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sort="idAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Id</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="dateAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Datum</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="memberAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Član</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="activeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Aktivna</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="clothingsCountAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj komada nošnje</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            string memberName = $"{item.Member.FirstName} {item.Member.LastName}";
+            string active = item.Active ? "da" : "ne";
+            int clothingsCount = item.ClothingReservations.Count;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <a asp-action="Details" asp-asp-controller="Members" asp-route-id="@item.Member.Id">@Html.DisplayFor(modelItem => memberName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => active)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => clothingsCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Brisanje</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex - 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @prevDisabled">
+    Prethodno
+</a>
+<a asp-action="Index"
+   asp-route-sort="@Model.CurrentSort"
+   asp-route-pageIndex=@(Model.PageIndex + 1)
+   asp-route-search="@Model.Search"
+   class="btn btn-primary @nextDisabled">
+    Sledeće
+</a>
