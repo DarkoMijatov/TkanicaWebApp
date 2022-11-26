@@ -42,7 +42,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.List) {
             string memberName = $"{item.Member.FirstName} {item.Member.LastName}";
             string active = item.Active ? "da" : "ne";
             int clothingsCount = item.ClothingReservations.Count;
@@ -54,7 +54,7 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                <a asp-action="Details" asp-asp-controller="Members" asp-route-id="@item.Member.Id">@Html.DisplayFor(modelItem => memberName)</a>
+                <a asp-action="Details" asp-controller="Members" asp-route-id="@item.Member.Id">@Html.DisplayFor(modelItem => memberName)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => active)

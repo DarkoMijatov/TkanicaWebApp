@@ -1,48 +1,57 @@
 ﻿@model TkanicaWebApp.Models.Reservation
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Podaci o rezervaciji";
+    string active = Model.Active ? "da" : "ne";
+    List<Clothing> clothings = Model.ClothingReservations.Select(x => x.Clothing).ToList();
 }
 
-<h1>Details</h1>
+<h1>Podaci o rezervaciji</h1>
 
 <div>
-    <h4>Reservation</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+            Datum
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Active)
+            Aktivna
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Active)
+            @Html.DisplayFor(model => active)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Member)
+            Član
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Member.Id)
+            <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.MemberId">@Html.DisplayFor(model => model.Member.FullName)</a>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+            Broj komada nošnje
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
+            @Html.DisplayFor(model => model.ClothingReservations.Count)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
+        <dt class="col-sm-2">
+            Nošnja:
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var clothing in clothings)
+                {
+                    string clothingText = $"{clothing.Id} ({clothing.ClothingType.Name}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Gender)}) ({TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(clothing.Age)})";
+                        <li>
+                            <a asp-controller="Clothings" asp-action="Details" asp-route-id="@clothing.Id">@Html.DisplayFor(model => clothingText)</a>
+                        </li>
+                }
+            </ul>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Izmena</a> |
+    <a asp-action="Index">Povratak na listu</a>
 </div>

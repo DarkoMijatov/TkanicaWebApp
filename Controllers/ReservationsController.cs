@@ -84,6 +84,10 @@ namespace TkanicaWebApp.Controllers
 
             var reservation = await _context.Reservation
                 .Include(r => r.Member)
+                .Include(r => r.ClothingReservations)
+                .Include("ClothingReservations.Clothing")
+                .Include("ClothingReservations.Clothing.ClothingType")
+                .Include("ClothingReservations.Clothing.ClothingRegion")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
             {
@@ -96,7 +100,13 @@ namespace TkanicaWebApp.Controllers
         // GET: Reservations/Create
         public IActionResult Create()
         {
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
+            ViewData["ClothingId"] = new SelectList(_context.Clothing
+                .Include(x => x.ClothingType)
+                .Include(x => x.ClothingRegion)
+                .Include(x => x.ClothingReservations)
+                .Include("ClothingReservations.Reservation")
+                .Where(x => !x.ClothingReservations.Any(c => c.Reservation.Active)), "Id", "ClothingText");
             return View();
         }
 
@@ -105,15 +115,34 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,Active,MemberId,CreatedAt,UpdatedAt")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("Id,Date,MemberId,ClothingIds")] ReservationViewModel reservationViewModel)
         {
+            var reservation = new Reservation();
             if (ModelState.IsValid)
             {
+                reservation.Date = reservationViewModel.Date;
+                reservation.MemberId = reservationViewModel.MemberId;
+                reservation.Active = true;
+                reservation.ClothingReservations = new List<ClothingReservation>();
+                foreach (int clothingId in reservationViewModel.ClothingIds)
+                {
+                    reservation.ClothingReservations.Add(new ClothingReservation
+                    {
+                        ClothingId = clothingId,
+                        Reservation = reservation
+                    });
+                }
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", reservation.MemberId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
+            ViewData["ClothingId"] = new SelectList(_context.Clothing
+                .Include(x => x.ClothingType)
+                .Include(x => x.ClothingRegion)
+                .Include(x => x.ClothingReservations)
+                .Include("ClothingReservations.Reservation")
+                .Where(x => !x.ClothingReservations.Any(c => c.Reservation.Active)), "Id", "ClothingText");
             return View(reservation);
         }
 
