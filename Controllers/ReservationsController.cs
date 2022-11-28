@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
@@ -154,13 +155,41 @@ namespace TkanicaWebApp.Controllers
                 return NotFound();
             }
 
-            var reservation = await _context.Reservation.FindAsync(id);
+            var reservation = await _context.Reservation
+                .Include(r => r.Member)
+                .Include(r => r.ClothingReservations)
+                .Include("ClothingReservations.Clothing")
+                .Include("ClothingReservations.Clothing.ClothingType")
+                .Include("ClothingReservations.Clothing.ClothingRegion")
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
             {
                 return NotFound();
             }
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", reservation.MemberId);
-            return View(reservation);
+            var reservationViewModel = new ReservationViewModel
+            {
+                Id = reservation.Id,
+                Date = reservation.Date,
+                Active = reservation.Active,
+                MemberId = reservation.MemberId,
+                ClothingIds = reservation.ClothingReservations.Select(x => x.ClothingId).ToList()
+            };
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
+            ViewData["ClothingId"] = new SelectList(_context.Clothing
+                .Include(x => x.ClothingType)
+                .Include(x => x.ClothingRegion)
+                .Include(x => x.ClothingReservations)
+                .Include("ClothingReservations.Reservation")
+                .Where(x => x.ClothingReservations.Select(x => x.ReservationId).Contains(reservation.Id)), "Id", "ClothingText", reservation.ClothingReservations.Select(x => x.ClothingId))
+                .Concat(
+                    new SelectList(_context.Clothing
+                    .Include(x => x.ClothingType)
+                    .Include(x => x.ClothingRegion)
+                    .Include(x => x.ClothingReservations)
+                    .Include("ClothingReservations.Reservation")
+                    .Where(x => !x.ClothingReservations.Select(x => x.ReservationId).Contains(reservation.Id)), "Id", "ClothingText", reservation.ClothingReservations.Select(x => x.ClothingId))
+                );
+            return View(reservationViewModel);
         }
 
         // POST: Reservations/Edit/5
@@ -168,9 +197,16 @@ namespace TkanicaWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,Active,MemberId,CreatedAt,UpdatedAt")] Reservation reservation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,MemberId,ClothingIds")] ReservationViewModel reservationViewModel)
         {
-            if (id != reservation.Id)
+            var reservation = await _context.Reservation
+                .Include(r => r.Member)
+                .Include(r => r.ClothingReservations)
+                .Include("ClothingReservations.Clothing")
+                .Include("ClothingReservations.Clothing.ClothingType")
+                .Include("ClothingReservations.Clothing.ClothingRegion")
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (id != reservationViewModel.Id)
             {
                 return NotFound();
             }
@@ -179,6 +215,18 @@ namespace TkanicaWebApp.Controllers
             {
                 try
                 {
+                    reservation.Date = reservationViewModel.Date;
+                    reservation.MemberId = reservationViewModel.MemberId;
+                    reservation.Active = reservationViewModel.Active;
+                    _context.ClothingReservation.RemoveRange(reservation.ClothingReservations);
+                    foreach (int clothingId in reservationViewModel.ClothingIds)
+                    {
+                        reservation.ClothingReservations.Add(new ClothingReservation
+                        {
+                            ClothingId = clothingId,
+                            Reservation = reservation
+                        });
+                    }
                     _context.Update(reservation);
                     await _context.SaveChangesAsync();
                 }
@@ -195,7 +243,21 @@ namespace TkanicaWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", reservation.MemberId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
+            ViewData["ClothingId"] = new SelectList(_context.Clothing
+                .Include(x => x.ClothingType)
+                .Include(x => x.ClothingRegion)
+                .Include(x => x.ClothingReservations)
+                .Include("ClothingReservations.Reservation")
+                .Where(x => x.ClothingReservations.Select(x => x.ReservationId).Contains(reservation.Id)), "Id", "ClothingText", reservation.ClothingReservations.Select(x => x.ClothingId))
+                .Concat(
+                    new SelectList(_context.Clothing
+                    .Include(x => x.ClothingType)
+                    .Include(x => x.ClothingRegion)
+                    .Include(x => x.ClothingReservations)
+                    .Include("ClothingReservations.Reservation")
+                    .Where(x => !x.ClothingReservations.Select(x => x.ReservationId).Contains(reservation.Id)), "Id", "ClothingText", reservation.ClothingReservations.Select(x => x.ClothingId))
+                );
             return View(reservation);
         }
 
@@ -209,6 +271,7 @@ namespace TkanicaWebApp.Controllers
 
             var reservation = await _context.Reservation
                 .Include(r => r.Member)
+                .Include(r => r.ClothingReservations)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
             {
@@ -227,7 +290,9 @@ namespace TkanicaWebApp.Controllers
             {
                 return Problem("Entity set 'TkanicaWebAppContext.Reservation'  is null.");
             }
-            var reservation = await _context.Reservation.FindAsync(id);
+            var reservation = await _context.Reservation
+                .Include(r => r.ClothingReservations)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation != null)
             {
                 _context.Reservation.Remove(reservation);

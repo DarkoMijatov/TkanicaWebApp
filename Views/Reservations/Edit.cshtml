@@ -1,12 +1,11 @@
-﻿@model TkanicaWebApp.Models.Reservation
+﻿@model TkanicaWebApp.ViewModels.ReservationViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Izmena rezervacije";
 }
 
-<h1>Edit</h1>
+<h1>Izmena rezervacije</h1>
 
-<h4>Reservation</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,39 +13,32 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
+                Datum
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                    <input class="form-check-input" asp-for="Active" /> Aktivna
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="MemberId" class="control-label"></label>
+                Član
                 <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
-                <span asp-validation-for="MemberId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                Komadi nošnje
+                <select asp-for="ClothingIds" class="form-control" multiple="multiple" asp-items="ViewBag.ClothingId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sačuvaj" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Povratak na listu</a>
 </div>
 
 @section Scripts {

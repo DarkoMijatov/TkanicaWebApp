@@ -1,51 +1,46 @@
 ﻿@model TkanicaWebApp.Models.Reservation
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Brisanje rezervacije";
+    string active = Model.Active ? "da" : "ne";
+    List<Clothing> clothings = Model.ClothingReservations.Select(x => x.Clothing).ToList();
 }
 
-<h1>Delete</h1>
+<h1>Brisanje rezervacije</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Da li ste sigurni da želite da obrišete rezervaciju?</h3>
 <div>
-    <h4>Reservation</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+        <dt class="col-sm-2">
+            Datum
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Active)
+        <dt class="col-sm-2">
+            Aktivna
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Active)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => active)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Member)
+        <dt class="col-sm-2">
+            Član
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Member.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Member.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+        <dt class="col-sm-2">
+            Broj komada nošnje
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClothingReservations.Count)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Brisanje" class="btn btn-danger" /> |
+        <a asp-action="Index">Povratak na listu</a>
     </form>
 </div>
