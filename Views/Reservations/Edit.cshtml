@@ -1,0 +1,46 @@
+﻿@model TkanicaWebApp.ViewModels.ReservationViewModel
+
+@{
+    ViewData["Title"] = "Izmena rezervacije";
+}
+
+<h1>Izmena rezervacije</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                Datum
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Active" /> Aktivna
+                </label>
+            </div>
+            <div class="form-group">
+                Član
+                <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
+            </div>
+            <div class="form-group">
+                Komadi nošnje
+                <select asp-for="ClothingIds" class="form-control" multiple="multiple" asp-items="ViewBag.ClothingId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sačuvaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Povratak na listu</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

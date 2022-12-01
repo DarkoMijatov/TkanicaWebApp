@@ -23,7 +23,8 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.MembershipFee.MemberGroup)
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")
-                .Include(x => x.Transactions);
+                .Include(x => x.Transactions)
+                .Include(x => x.Reservations);
             if (!string.IsNullOrEmpty(sort))
             {
                 viewModel.CurrentSort = sort == viewModel.CurrentSort ? sort.Replace("Asc", "Desc") : sort;
@@ -51,6 +52,8 @@ namespace TkanicaWebApp.Controllers
                     "debtAmountDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount)).ToListAsync(),
                     "rehearsalsAsc" => await tkanicaWebAppContext.OrderBy(x => x.RehearsalMembers.Count(x => x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)).ToListAsync(),
                     "rehearsalsDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.RehearsalMembers.Count(x => x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)).ToListAsync(),
+                    "reservationsAsc" => await tkanicaWebAppContext.OrderBy(x => x.Reservations.Count(x => x.Active)).ToListAsync(),
+                    "reservationsDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Reservations.Count(x => x.Active)).ToListAsync(),
                     _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync()
                 };
             }
@@ -107,6 +110,7 @@ namespace TkanicaWebApp.Controllers
                 .Include("RehearsalMembers.Rehearsal")
                 .Include(x => x.Transactions)
                 .Include("Transactions.TransactionType")
+                .Include(x => x.Reservations)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var rehearsals = await _context.Rehearsal.Where(x => x.Date.Year == DateTime.UtcNow.Year).ToListAsync();
@@ -134,8 +138,10 @@ namespace TkanicaWebApp.Controllers
                 ProfilePicture = member.ProfilePicture,
                 YearsOfExperience = member.YearsOfExperience,
                 RehearsalsCount = memberRehearsals,
+                ReservationsCount = member.Reservations.Count(x => x.Active),
                 Rehearsals = member.RehearsalMembers.Select(x => x.Rehearsal).Where(x => x.Date.Month == DateTime.UtcNow.Month && x.Date.Year == DateTime.UtcNow.Year).ToList(),
                 Transactions = member.Transactions,
+                Reservations = member.Reservations.Where(x => x.Active).ToList(),
                 UpdatedAt = member.UpdatedAt,
                 PresenceTrackingPercentage = $"{Math.Round(memberRehearsals * 100m / rehearsals.Count, 2)} %"
             };
@@ -244,6 +250,7 @@ namespace TkanicaWebApp.Controllers
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")
                 .Include(x => x.Transactions)
+                .Include(x => x.Reservations)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {

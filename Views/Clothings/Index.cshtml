@@ -41,6 +41,9 @@
             <th>
                 <a asp-action="Index" asp-route-sort="sizeAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Veličina</a>
             </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="reservedAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Rezervisano</a>
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,7 +51,8 @@
 @foreach (var item in Model.List) {
         string gender = TkanicaWebApp.Classes.Constants.Gender.GetValueOrDefault(item.Gender);
         string age = TkanicaWebApp.Classes.Constants.Age.GetValueOrDefault(item.Age);
-        <tr>
+        string reserved = item.ClothingReservations.Count(x => x.Reservation.Active) > 0 ? "da" : "ne";
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
@@ -66,6 +70,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => reserved)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |

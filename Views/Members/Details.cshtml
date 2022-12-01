@@ -131,6 +131,12 @@
             @Html.DisplayFor(model => model.RehearsalsCount)
         </dd>
         <dt class="col-sm-2">
+            Broj aktivnih rezervacija
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReservationsCount)
+        </dd>
+        <dt class="col-sm-2">
             Redovnost
         </dt>
         <dd class="col-sm-10">
@@ -159,6 +165,20 @@
                     var transactionText = (transaction.TransactionNumber != "" ? transaction.TransactionNumber : transaction.Amount.ToString()) + (!transaction.Paid ? " (neplaćena)" : "") + " (" + transaction.TransactionType.Name + ")" + (transaction.TransactionTypeId == 1 ? $" ({transaction.Description})" : "");
                     <li>
                         <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">@Html.DisplayFor(model => transactionText)</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Aktivne rezervacije:
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var reservation in Model.Reservations)
+                {
+                    var reservationText = $"{reservation.Date:d}";
+                    <li>
+                        <a asp-controller="Reservations" asp-action="Details" asp-route-id="@reservation.Id">@Html.DisplayFor(model => reservationText)</a>
                     </li>
                 }
             </ul>

@@ -25,9 +25,11 @@ namespace TkanicaWebApp.ViewModels
         public decimal MembershipFeeAmount { get; set; }
         public decimal DebtAmount { get; set; }
         public int RehearsalsCount { get; set; }
+        public int ReservationsCount { get; set; }
         public string PresenceTrackingPercentage { get; set; }
         public List<Rehearsal> Rehearsals { get; set; }
         public List<Transaction> Transactions { get; set; }
+        public List<Reservation> Reservations { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
 }

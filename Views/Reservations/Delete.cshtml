@@ -1,0 +1,46 @@
+﻿@model TkanicaWebApp.Models.Reservation
+
+@{
+    ViewData["Title"] = "Brisanje rezervacije";
+    string active = Model.Active ? "da" : "ne";
+    List<Clothing> clothings = Model.ClothingReservations.Select(x => x.Clothing).ToList();
+}
+
+<h1>Brisanje rezervacije</h1>
+
+<h3>Da li ste sigurni da želite da obrišete rezervaciju?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Datum
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            Aktivna
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => active)
+        </dd>
+        <dt class="col-sm-2">
+            Član
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Member.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            Broj komada nošnje
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClothingReservations.Count)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Brisanje" class="btn btn-danger" /> |
+        <a asp-action="Index">Povratak na listu</a>
+    </form>
+</div>

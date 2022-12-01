@@ -57,5 +57,6 @@ namespace TkanicaWebApp.Models
         public List<Transaction> Transactions { get; set; }
         [NotMapped]
         public string FullName { get => $"{FirstName} {LastName}"; }
+        public List<Reservation> Reservations { get; set; }
     }
 }
