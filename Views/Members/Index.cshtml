@@ -56,6 +56,9 @@
             <th>
                 <a asp-action="Index" asp-route-sort="rehearsalsAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj proba</a>
             </th>
+            <th>
+                <a asp-action="Index" asp-route-sort="reservationsAsc" asp-route-currentSort="@Model.CurrentSort" asp-route-search="@Model.Search" asp-route-pageIndex="@Model.PageIndex">Broj aktivnih rezervacija</a>
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -64,6 +67,7 @@
             string active = item.Active ? "da" : "ne";
             int rehearsalCount = item.RehearsalMembers.Count(x => x.Rehearsal.Date.Year == DateTime.UtcNow.Year && x.Rehearsal.Date.Month == DateTime.UtcNow.Month);
             decimal debtAmount = item.Transactions.Where(x => x.TransactionTypeId == 1 && !x.Paid).Sum(x => x.Amount);
+            int activeReservationsCount = item.Reservations.Count(x => x.Active);
             <tr>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
@@ -98,6 +102,9 @@
             <td>
                 @Html.DisplayFor(modelItem => rehearsalCount)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => activeReservationsCount)
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Izmena</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |

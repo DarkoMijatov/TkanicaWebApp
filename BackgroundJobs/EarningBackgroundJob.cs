@@ -34,17 +34,7 @@ namespace TkanicaWebApp.BackgroundJobs
 
                 foreach (var employee in employees)
                 {
-                    // update Employee to inactive if there are no Rehearsals attended this month
-                    int rehearsalEmployeeCount = await _context.RehearsalEmployee
-                        .Include(x => x.Rehearsal)
-                        .Where(x => x.EmployeeId == employee.Id && x.Rehearsal.Date.Month == DateTime.UtcNow.Month && x.Rehearsal.Date.Year == DateTime.UtcNow.Year)
-                        .CountAsync();
-                    if (rehearsalEmployeeCount == 0)
-                    {
-                        employee.Active = false;
-                        _context.Update(employee);
-                    }
-                    else if (employee.PayPeriodId == 1 && !employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.TransactionDate == DateTime.UtcNow))
+                    if (employee.PayPeriodId == 1 && !employee.Transactions.Any(x => x.TransactionTypeId == 2 && x.TransactionDate == DateTime.UtcNow))
                     {
                         var transactionDate = DateTime.UtcNow.AddDays(-1);
 

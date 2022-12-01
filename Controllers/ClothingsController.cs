@@ -22,7 +22,9 @@ namespace TkanicaWebApp.Controllers
         {
             var tkanicaWebAppContext = _context.Clothing
                 .Include(c => c.ClothingRegion)
-                .Include(c => c.ClothingType);
+                .Include(c => c.ClothingType)
+                .Include(c => c.ClothingReservations)
+                .Include("ClothingReservations.Reservation");
             if (!string.IsNullOrEmpty(sort))
             {
                 viewModel.CurrentSort = sort == viewModel.CurrentSort ? sort.Replace("Asc", "Desc") : sort;
@@ -40,6 +42,8 @@ namespace TkanicaWebApp.Controllers
                     "ageDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Age).ToListAsync(),
                     "sizeAsc" => await tkanicaWebAppContext.OrderBy(x => x.Size).ToListAsync(),
                     "sizeDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.Size).ToListAsync(),
+                    "reservedAsc" => await tkanicaWebAppContext.OrderBy(x => x.ClothingReservations.Count(x => x.Reservation.Active)).ToListAsync(),
+                    "reservedDesc" => await tkanicaWebAppContext.OrderByDescending(x => x.ClothingReservations.Count(x => x.Reservation.Active)).ToListAsync(),
                     _ => await tkanicaWebAppContext.OrderBy(x => x.Id).ToListAsync(),
                 };
             }
@@ -87,6 +91,8 @@ namespace TkanicaWebApp.Controllers
             var clothing = await _context.Clothing
                 .Include(c => c.ClothingRegion)
                 .Include(c => c.ClothingType)
+                .Include(c => c.ClothingReservations)
+                .Include("ClothingReservations.Reservation")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (clothing == null)
             {
