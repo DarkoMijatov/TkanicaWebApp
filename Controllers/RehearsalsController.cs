@@ -166,8 +166,24 @@ namespace TkanicaWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(x => x.Active), "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId));
-            ViewData["MemberId"] = new SelectList(_context.Member.Where(x => x.Active), "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId));
+            ViewData["EmployeeId"] = new SelectList(_context.Employee
+                .Include(x => x.RehearsalEmployees)
+                .Where(x => x.Active && x.RehearsalEmployees.Any(x => x.RehearsalId == rehearsal.Id))
+                , "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId))
+                .Concat(new SelectList(_context.Employee
+                    .Include(x => x.RehearsalEmployees)
+                    .Where(x => x.Active && !x.RehearsalEmployees.Any(x => x.RehearsalId == rehearsal.Id)),
+                    "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId)));
+
+            ViewData["MemberId"] = new SelectList(_context.Member
+                .Include(x => x.RehearsalMembers)
+                .Where(x => x.Active && x.RehearsalMembers.Any(x => x.RehearsalId == rehearsal.Id))
+                , "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId))
+                .Concat(new SelectList(_context.Member
+                    .Include(x => x.RehearsalMembers)
+                    .Where(x => x.Active && !x.RehearsalMembers.Any(x => x.RehearsalId == rehearsal.Id)),
+                    "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId)));
+
             return View(rehearsalViewModel);
         }
 
@@ -229,6 +245,25 @@ namespace TkanicaWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewData["EmployeeId"] = new SelectList(_context.Employee
+                .Include(x => x.RehearsalEmployees)
+                .Where(x => x.Active && x.RehearsalEmployees.Any(x => x.RehearsalId == rehearsal.Id))
+                , "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId))
+                .Concat(new SelectList(_context.Employee
+                    .Include(x => x.RehearsalEmployees)
+                    .Where(x => x.Active && !x.RehearsalEmployees.Any(x => x.RehearsalId == rehearsal.Id)),
+                    "Id", "FullName", rehearsal.RehearsalEmployees.Select(x => x.EmployeeId)));
+
+            ViewData["MemberId"] = new SelectList(_context.Member
+                .Include(x => x.RehearsalMembers)
+                .Where(x => x.Active && x.RehearsalMembers.Any(x => x.RehearsalId == rehearsal.Id))
+                , "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId))
+                .Concat(new SelectList(_context.Member
+                    .Include(x => x.RehearsalMembers)
+                    .Where(x => x.Active && !x.RehearsalMembers.Any(x => x.RehearsalId == rehearsal.Id)),
+                    "Id", "FullName", rehearsal.RehearsalMembers.Select(x => x.MemberId)));
+
             return View(rehearsal);
         }
 
