@@ -16,6 +16,9 @@ namespace TkanicaWebApp.Data.Configurations
                 .WithOne(x => x.Employee)
                 .HasForeignKey(x => x.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.User)
+                .WithOne(x => x.Employee)
+                .HasForeignKey<Employee>(x => x.UserId);
         }
     }
 }

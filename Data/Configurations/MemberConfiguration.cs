@@ -13,6 +13,9 @@ namespace TkanicaWebApp.Data.Configurations
                 .HasForeignKey(x => x.MembershipFeeId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.User)
+                .WithOne(x => x.Member)
+                .HasForeignKey<Member>(x => x.UserId);
         }
     }
 }

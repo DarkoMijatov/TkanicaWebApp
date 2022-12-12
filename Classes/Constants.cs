@@ -24,6 +24,14 @@ namespace TkanicaWebApp.Classes
             {4, "Severoistočna Srbija" },
             {5, "Jugoistočna Srbija" }
         };
+
+        public static Dictionary<int, string> UserTypes = new()
+        {
+            {1, "administrator" },
+            {2, "upravnik" },
+            {3, "član" },
+            {4, "zaposleni" }
+        };
     }
 
     public class DictionaryValues

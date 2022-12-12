@@ -34,6 +34,7 @@ namespace TkanicaWebApp.Models
         [DataType(DataType.Text)]
         [Column(TypeName = "varchar(50)")]
         public string OtherExpensesDescription { get; set; }
+        public byte[] ProfilePicture { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         [DataType(DataType.DateTime)]
@@ -43,5 +44,7 @@ namespace TkanicaWebApp.Models
         public List<Transaction> Transactions { get; set; }
         [NotMapped]
         public string FullName { get => $"{FirstName} {LastName}"; }
+        public int? UserId { get; set; }
+        public User User { get; set; }
     }
 }
