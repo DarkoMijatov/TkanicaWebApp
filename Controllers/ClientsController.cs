@@ -23,6 +23,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Clients
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Client> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Client
               .Include(x => x.AccountNumbers)
               .Include(x => x.CreditorTransactions)

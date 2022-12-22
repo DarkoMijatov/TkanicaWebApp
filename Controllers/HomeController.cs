@@ -15,6 +15,8 @@ namespace TkanicaWebApp.Controllers
 
         public IActionResult Index()
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             return View();
         }
 

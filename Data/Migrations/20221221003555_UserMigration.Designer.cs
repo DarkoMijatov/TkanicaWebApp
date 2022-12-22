@@ -12,7 +12,7 @@ using TkanicaWebApp.Data;
 namespace TkanicaWebApp.Data.Migrations
 {
     [DbContext(typeof(TkanicaWebAppContext))]
-    [Migration("20221212225911_UserMigration")]
+    [Migration("20221221003555_UserMigration")]
     partial class UserMigration
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace TkanicaWebApp.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("Serbian_Latin_100_CI_AI_KS_WS_SC_UTF8")
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -1177,7 +1177,7 @@ namespace TkanicaWebApp.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<byte[]>("ProfilePicture")
                         .HasColumnType("varbinary(max)");
@@ -1202,6 +1202,18 @@ namespace TkanicaWebApp.Data.Migrations
                         .HasFilter("[MemberId] IS NOT NULL");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "darko.mijatov95@gmail.com",
+                            Password = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserTypeId = 1,
+                            Verified = true
+                        });
                 });
 
             modelBuilder.Entity("TkanicaWebApp.Models.AccountNumber", b =>

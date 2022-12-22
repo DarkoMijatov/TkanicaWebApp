@@ -18,6 +18,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Members
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Member> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Member
                 .Include(m => m.MembershipFee)
                 .Include(x => x.MembershipFee.MemberGroup)

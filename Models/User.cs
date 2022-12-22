@@ -13,7 +13,7 @@ namespace TkanicaWebApp.Models
         [Column(TypeName = "varchar(30)")]
         public string Email { get; set; }
         [DataType(DataType.Password)]
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "varchar(1000)")]
         public string Password { get; set; }
         public int UserTypeId { get; set; }
         public bool Verified { get; set; }

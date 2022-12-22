@@ -19,6 +19,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Rehearsals
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Rehearsal> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Rehearsal
                 .Include(x => x.RehearsalEmployees)
                 .Include(x => x.RehearsalMembers)

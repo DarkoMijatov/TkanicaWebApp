@@ -36,7 +36,7 @@ namespace TkanicaWebApp.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "varchar(30)", nullable: true),
-                    Password = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Password = table.Column<string>(type: "varchar(1000)", nullable: true),
                     UserTypeId = table.Column<int>(type: "int", nullable: false),
                     Verified = table.Column<bool>(type: "bit", nullable: false),
                     ProfilePicture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
@@ -61,6 +61,11 @@ namespace TkanicaWebApp.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "CreatedAt", "Email", "EmployeeId", "MemberId", "Password", "ProfilePicture", "UpdatedAt", "UserTypeId", "Verified" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "darko.mijatov95@gmail.com", null, null, "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, true });
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_EmployeeId",

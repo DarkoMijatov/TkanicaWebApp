@@ -20,6 +20,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Clothings
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Clothing> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Clothing
                 .Include(c => c.ClothingRegion)
                 .Include(c => c.ClothingType)

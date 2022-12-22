@@ -24,6 +24,8 @@ namespace TkanicaWebApp.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<Reservation> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Reservation
                 .Include(r => r.Member)
                 .Include(r => r.ClothingReservations);

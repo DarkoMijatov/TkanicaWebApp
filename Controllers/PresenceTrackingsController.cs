@@ -18,6 +18,8 @@ namespace TkanicaWebApp.Controllers
 
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<PresenceTracking> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.Member
                 .Include(x => x.RehearsalMembers)
                 .Include("RehearsalMembers.Rehearsal")

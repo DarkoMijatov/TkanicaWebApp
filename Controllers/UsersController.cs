@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
 using TkanicaWebApp.Data;
 using TkanicaWebApp.Models;
+using TkanicaWebApp.ViewModels;
 
 namespace TkanicaWebApp.Controllers
 {
@@ -18,10 +20,12 @@ namespace TkanicaWebApp.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.User.
-                Include(u => u.Employee).
-                Include(u => u.Member);
-            return View(await tkanicaWebAppContext.ToListAsync());
+                    Include(u => u.Employee).
+                    Include(u => u.Member);
+                return View(await tkanicaWebAppContext.ToListAsync());            
         }
 
         // GET: Users/Details/5
@@ -167,6 +171,34 @@ namespace TkanicaWebApp.Controllers
         private bool UserExists(int id)
         {
           return _context.User.Any(e => e.Id == id);
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost, ActionName("Login")]
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        {
+            if (loginViewModel == null || loginViewModel.Email == null || loginViewModel.Password == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User
+                .Include(u => u.Employee)
+                .Include(u => u.Member)
+                .FirstOrDefaultAsync(m => m.Email == loginViewModel.Email && m.Password == loginViewModel.Password.ToSHA256String());
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                Classes.Constants._loggedIn = true;
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

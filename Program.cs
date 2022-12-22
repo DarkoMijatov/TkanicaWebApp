@@ -69,7 +69,7 @@ namespace TkanicaWebApp
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{Id?}");
+                pattern: "{controller=Users}/{action=Login}/{Id?}");
 
             app.Run();
         }

@@ -24,6 +24,8 @@ namespace TkanicaWebApp.Controllers
         // GET: MembershipFees
         public async Task<IActionResult> Index(string sort, string search, int? pageIndex, PageViewModel<MembershipFee> viewModel)
         {
+            if (!Classes.Constants._loggedIn)
+                return RedirectToAction("Login", "Users");
             var tkanicaWebAppContext = _context.MembershipFee.Include(m => m.MemberGroup).Include(m => m.Members);
             if (!string.IsNullOrEmpty(sort))
             {

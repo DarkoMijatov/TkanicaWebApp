@@ -32,6 +32,8 @@ namespace TkanicaWebApp.Classes
             {3, "član" },
             {4, "zaposleni" }
         };
+
+        public static bool _loggedIn = false;
     }
 
     public class DictionaryValues
@@ -42,11 +44,12 @@ namespace TkanicaWebApp.Classes
         public static List<DictionaryValues> GetDictionaryValues(Dictionary<int, string> dictionary)
         {
             var list = new List<DictionaryValues>();
-            foreach(var keyValue in dictionary)
+            foreach (var keyValue in dictionary)
             {
                 list.Add(new DictionaryValues { Id = keyValue.Key, Name = keyValue.Value });
             }
             return list;
         }
     }
+
 }
